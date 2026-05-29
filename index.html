@@ -4,201 +4,675 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GovCon CRM</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f4f3ef;
-  --surface: #ffffff;
-  --border: #dddbd4;
-  --border-strong: #b8b5ac;
-  --text: #1a1917;
-  --text-muted: #6b6860;
-  --text-faint: #9e9b93;
-  --accent: #1a3a2a;
-  --accent-light: #2d6648;
-  --accent-bg: #e8f0eb;
-  --accent-border: #a8c9b4;
-  --danger: #8b2e2e;
-  --danger-bg: #f5eaea;
-  --warning: #7a5200;
-  --warning-bg: #fef3dc;
-  --mono: 'IBM Plex Mono', monospace;
-  --sans: 'IBM Plex Sans', sans-serif;
+  --primary: #2D5A87;
+  --secondary: #4A7C8A;
+  --accent: #6B9B7A;
+  --light: #F7F8FC;
+  --dark: #2A2A3E;
+  --gradient-1: linear-gradient(135deg, #2D5A87 0%, #4A7C8A 100%);
+  --gradient-2: linear-gradient(135deg, #F1E5AC 0%, #4a90e2 100%);
+  --surface: rgba(255,255,255,0.85);
+  --border: rgba(45,90,135,0.12);
+  --border-strong: rgba(45,90,135,0.25);
+  --text: #2A2A3E;
+  --text-muted: #5a6a7a;
+  --text-faint: #9aaabb;
+  --danger: #c0392b;
+  --danger-bg: #fdf0ef;
+  --warning: #8a6200;
+  --warning-bg: #fef9ec;
+  --sans: 'DM Sans', sans-serif;
+  --serif: 'DM Serif Display', serif;
 }
+ 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
-
+ 
+body {
+  font-family: var(--sans);
+  background: #F7F8FC;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+ 
+/* Animated ambient background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: linear-gradient(135deg, #e8f4fd 0%, #f0f7f4 50%, #fdf6e3 100%);
+}
+ 
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.04;
+  background-image:
+    repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(45,90,135,0.4) 35px, rgba(45,90,135,0.4) 70px),
+    repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(74,124,138,0.3) 35px, rgba(74,124,138,0.3) 70px);
+}
+ 
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -1;
+  animation: breathe 10s ease-in-out infinite;
+}
+.orb-1 { width: 500px; height: 500px; top: -150px; left: -150px; background: radial-gradient(circle, rgba(45,90,135,0.07) 0%, transparent 70%); animation-delay: 0s; }
+.orb-2 { width: 400px; height: 400px; bottom: -100px; right: -100px; background: radial-gradient(circle, rgba(107,155,122,0.08) 0%, transparent 70%); animation-delay: 3s; }
+.orb-3 { width: 300px; height: 300px; top: 40%; left: 55%; background: radial-gradient(circle, rgba(241,229,172,0.12) 0%, transparent 70%); animation-delay: 6s; }
+ 
+@keyframes breathe {
+  0%, 100% { transform: scale(1) translate(0,0); opacity: 0.6; }
+  33% { transform: scale(1.15) translate(-15px, -10px); opacity: 0.9; }
+  66% { transform: scale(0.9) translate(10px, 15px); opacity: 0.5; }
+}
+ 
 /* Layout */
 .shell { display: flex; min-height: 100vh; }
-.sidebar { width: 220px; background: var(--accent); color: #fff; display: flex; flex-direction: column; flex-shrink: 0; position: sticky; top: 0; height: 100vh; }
-.sidebar-logo { padding: 24px 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-.sidebar-logo h1 { font-family: var(--mono); font-size: 13px; font-weight: 500; letter-spacing: 0.08em; color: #fff; }
-.sidebar-logo p { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
-.sidebar-nav { flex: 1; padding: 12px 0; }
-.nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 20px; font-size: 13px; color: rgba(255,255,255,0.7); cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; }
-.nav-item:hover { background: rgba(255,255,255,0.08); color: #fff; }
-.nav-item.active { background: rgba(255,255,255,0.12); color: #fff; border-left-color: #7dc99a; }
-.nav-item svg { width: 15px; height: 15px; flex-shrink: 0; }
-.nav-count { margin-left: auto; background: rgba(255,255,255,0.15); border-radius: 10px; padding: 1px 7px; font-size: 11px; font-family: var(--mono); }
-.sidebar-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: rgba(255,255,255,0.4); font-family: var(--mono); }
-.conn-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #7dc99a; margin-right: 6px; }
-
+ 
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  box-shadow: 4px 0 30px rgba(45,90,135,0.06);
+}
+ 
+.sidebar-logo {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid var(--border);
+}
+ 
+.sidebar-logo h1 {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 400;
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.01em;
+}
+ 
+.sidebar-logo p {
+  font-size: 11px;
+  color: var(--text-faint);
+  margin-top: 3px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+ 
+.sidebar-nav { flex: 1; padding: 16px 12px; }
+ 
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 12px;
+  margin-bottom: 4px;
+  transition: all 0.25s ease;
+  border: 1px solid transparent;
+}
+ 
+.nav-item:hover {
+  background: rgba(45,90,135,0.07);
+  color: var(--primary);
+  transform: translateX(2px);
+}
+ 
+.nav-item.active {
+  background: linear-gradient(135deg, rgba(45,90,135,0.12) 0%, rgba(74,124,138,0.1) 100%);
+  color: var(--primary);
+  border-color: rgba(45,90,135,0.15);
+  box-shadow: 0 2px 12px rgba(45,90,135,0.1);
+}
+ 
+.nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+ 
+.nav-count {
+  margin-left: auto;
+  background: var(--gradient-1);
+  color: white;
+  border-radius: 20px;
+  padding: 1px 8px;
+  font-size: 11px;
+  font-weight: 600;
+}
+ 
+.sidebar-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-faint);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+ 
+.conn-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  animation: dotPulse 2.5s ease-in-out infinite;
+}
+ 
+@keyframes dotPulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; box-shadow: 0 0 0 0 rgba(107,155,122,0.4); }
+  50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 0 4px rgba(107,155,122,0); }
+}
+ 
+/* Main */
 .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-.topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; }
-.topbar-title { font-size: 15px; font-weight: 600; }
-.topbar-sub { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
-.content { flex: 1; padding: 28px; overflow-y: auto; }
-
-/* Tabs / pages */
+ 
+.topbar {
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 20px rgba(45,90,135,0.05);
+}
+ 
+.topbar-title {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--dark);
+  letter-spacing: -0.02em;
+}
+ 
+.topbar-sub {
+  font-size: 12px;
+  color: var(--text-faint);
+  margin-top: 1px;
+}
+ 
+.content { flex: 1; padding: 32px; overflow-y: auto; }
+ 
+/* Pages */
 .page { display: none; }
 .page.active { display: block; }
-
-/* Stats */
-.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
-.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
-.stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; font-family: var(--mono); }
-.stat-val { font-size: 28px; font-weight: 600; font-family: var(--mono); margin-top: 4px; color: var(--accent); }
-
+ 
+/* Stats grid */
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+ 
+.stat-card {
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px 22px;
+  box-shadow: 0 4px 20px rgba(45,90,135,0.06);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+ 
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--gradient-2);
+  border-radius: 18px 18px 0 0;
+}
+ 
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(45,90,135,0.12);
+}
+ 
+.stat-label {
+  font-size: 11px;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+ 
+.stat-val {
+  font-family: var(--serif);
+  font-size: 34px;
+  color: var(--primary);
+  margin-top: 6px;
+  letter-spacing: -0.02em;
+}
+ 
 /* Section headers */
-.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-.section-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); font-family: var(--mono); }
-
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+ 
+.section-title {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--dark);
+  letter-spacing: -0.01em;
+}
+ 
 /* Buttons */
-.btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 6px; font-size: 13px; font-family: var(--sans); font-weight: 500; cursor: pointer; border: 1px solid transparent; transition: all 0.15s; }
-.btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-.btn-primary:hover { background: var(--accent-light); }
-.btn-ghost { background: transparent; color: var(--text-muted); border-color: var(--border); }
-.btn-ghost:hover { background: var(--bg); color: var(--text); }
-.btn-danger { background: var(--danger-bg); color: var(--danger); border-color: #e8c5c5; }
-.btn-danger:hover { background: #eecece; }
-.btn-sm { padding: 4px 10px; font-size: 12px; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-family: var(--sans);
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+ 
+.btn-primary {
+  background: var(--gradient-1);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(45,90,135,0.25);
+}
+ 
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(45,90,135,0.35);
+}
+ 
+.btn-ghost {
+  background: rgba(255,255,255,0.7);
+  color: var(--text-muted);
+  border-color: var(--border);
+  backdrop-filter: blur(8px);
+}
+ 
+.btn-ghost:hover {
+  background: rgba(255,255,255,0.95);
+  color: var(--primary);
+  border-color: var(--border-strong);
+}
+ 
+.btn-danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border-color: rgba(192,57,43,0.2);
+}
+ 
+.btn-danger:hover {
+  background: #fde3e0;
+  border-color: rgba(192,57,43,0.35);
+}
+ 
+.btn-sm { padding: 5px 12px; font-size: 12px; }
 .btn svg { width: 14px; height: 14px; }
-
+ 
 /* Table */
-.table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.table-wrap {
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(45,90,135,0.06);
+}
+ 
 table { width: 100%; border-collapse: collapse; }
-th { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); padding: 10px 16px; text-align: left; background: var(--bg); border-bottom: 1px solid var(--border); font-family: var(--mono); }
-td { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: top; }
+ 
+th {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-faint);
+  padding: 12px 18px;
+  text-align: left;
+  background: rgba(247,248,252,0.8);
+  border-bottom: 1px solid var(--border);
+}
+ 
+td {
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(45,90,135,0.06);
+  font-size: 13.5px;
+  vertical-align: middle;
+}
+ 
 tr:last-child td { border-bottom: none; }
-tr:hover td { background: #fafaf8; }
-.td-mono { font-family: var(--mono); font-size: 12px; }
-.empty-row td { text-align: center; color: var(--text-faint); padding: 40px; font-size: 13px; }
-
+tr:hover td { background: rgba(45,90,135,0.025); }
+ 
+.td-mono { font-variant-numeric: tabular-nums; font-size: 12.5px; color: var(--text-muted); }
+.empty-row td { text-align: center; color: var(--text-faint); padding: 48px; font-size: 13px; }
+ 
 /* Badges */
-.badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; font-family: var(--mono); }
-.badge-active { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border); }
-.badge-won { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
-.badge-lost { background: var(--danger-bg); color: var(--danger); border: 1px solid #e8c5c5; }
-.badge-pending { background: var(--warning-bg); color: var(--warning); border: 1px solid #f0d495; }
-.badge-high { background: var(--danger-bg); color: var(--danger); border: 1px solid #e8c5c5; }
-.badge-medium { background: var(--warning-bg); color: var(--warning); border: 1px solid #f0d495; }
-.badge-low { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border); }
-
-/* Actions cell */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+ 
+.badge-active { background: rgba(107,155,122,0.15); color: #3a7a52; border: 1px solid rgba(107,155,122,0.3); }
+.badge-won { background: rgba(45,90,135,0.1); color: var(--primary); border: 1px solid rgba(45,90,135,0.2); }
+.badge-lost { background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(192,57,43,0.2); }
+.badge-pending { background: var(--warning-bg); color: var(--warning); border: 1px solid rgba(138,98,0,0.2); }
+.badge-high { background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(192,57,43,0.2); }
+.badge-medium { background: var(--warning-bg); color: var(--warning); border: 1px solid rgba(138,98,0,0.2); }
+.badge-low { background: rgba(107,155,122,0.15); color: #3a7a52; border: 1px solid rgba(107,155,122,0.3); }
+ 
 .actions { display: flex; gap: 6px; }
-
+ 
 /* Modal */
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,10,8,0.5); z-index: 100; align-items: center; justify-content: center; }
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(42,42,62,0.4);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+}
+ 
 .modal-overlay.open { display: flex; }
-.modal { background: var(--surface); border-radius: 12px; width: 560px; max-width: 95vw; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
-.modal-header { padding: 20px 24px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-.modal-title { font-size: 15px; font-weight: 600; }
-.modal-close { background: none; border: none; cursor: pointer; color: var(--text-muted); padding: 4px; border-radius: 4px; }
-.modal-close:hover { background: var(--bg); }
-.modal-body { padding: 20px 24px; }
-.modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
-
+ 
+.modal {
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  width: 580px;
+  max-width: 95vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 30px 80px rgba(42,42,62,0.2), 0 0 0 1px rgba(45,90,135,0.1);
+  animation: modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+ 
+@keyframes modalIn {
+  from { transform: scale(0.9) translateY(20px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+ 
+.modal-header {
+  padding: 24px 28px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+ 
+.modal-title {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--dark);
+}
+ 
+.modal-close {
+  background: rgba(45,90,135,0.07);
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+ 
+.modal-close:hover { background: rgba(45,90,135,0.15); color: var(--primary); transform: rotate(90deg); }
+.modal-body { padding: 22px 28px; }
+.modal-footer { padding: 18px 28px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+ 
 /* Form */
-.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .form-full { grid-column: 1 / -1; }
-.form-group { display: flex; flex-direction: column; gap: 5px; }
-label { font-size: 12px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--mono); }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+ 
+label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+ 
 label .req { color: var(--danger); }
-input, select, textarea { font-family: var(--sans); font-size: 13px; padding: 8px 11px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; width: 100%; }
-input:focus, select:focus, textarea:focus { border-color: var(--accent-light); box-shadow: 0 0 0 3px rgba(45,102,72,0.1); }
-textarea { resize: vertical; min-height: 72px; }
-.hint { font-size: 11px; color: var(--text-faint); font-family: var(--mono); }
-
+ 
+input, select, textarea {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.8);
+  color: var(--text);
+  outline: none;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+ 
+input:focus, select:focus, textarea:focus {
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 4px rgba(74,124,138,0.1);
+  background: white;
+}
+ 
+textarea { resize: vertical; min-height: 80px; }
+.hint { font-size: 11px; color: var(--text-faint); }
+ 
 /* File upload */
-.file-zone { border: 1.5px dashed var(--border-strong); border-radius: 8px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.15s; }
-.file-zone:hover, .file-zone.dragover { border-color: var(--accent-light); background: var(--accent-bg); }
-.file-zone p { font-size: 13px; color: var(--text-muted); margin-top: 6px; }
-.file-zone small { font-size: 11px; color: var(--text-faint); font-family: var(--mono); }
+.file-zone {
+  border: 1.5px dashed var(--border-strong);
+  border-radius: 14px;
+  padding: 22px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background: rgba(247,248,252,0.6);
+}
+ 
+.file-zone:hover, .file-zone.dragover {
+  border-color: var(--secondary);
+  background: rgba(74,124,138,0.05);
+}
+ 
+.file-zone p { font-size: 13px; color: var(--text-muted); margin-top: 8px; }
+.file-zone small { font-size: 11px; color: var(--text-faint); }
 .file-list { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
-.file-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: var(--bg); border-radius: 6px; border: 1px solid var(--border); }
-.file-item-name { flex: 1; font-size: 12px; font-family: var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.file-item-size { font-size: 11px; color: var(--text-faint); font-family: var(--mono); }
-.file-item-del { background: none; border: none; cursor: pointer; color: var(--text-faint); padding: 2px; }
-.file-item-del:hover { color: var(--danger); }
-
-/* Attached files in table */
-.file-chip { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; font-size: 11px; font-family: var(--mono); color: var(--text-muted); cursor: pointer; margin: 2px 2px 2px 0; text-decoration: none; }
-.file-chip:hover { border-color: var(--accent-light); color: var(--accent); }
-
+ 
+.file-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  background: rgba(255,255,255,0.8);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+ 
+.file-item-name { flex: 1; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-item-size { font-size: 11px; color: var(--text-faint); }
+.file-item-del { background: none; border: none; cursor: pointer; color: var(--text-faint); padding: 2px 4px; border-radius: 4px; }
+.file-item-del:hover { color: var(--danger); background: var(--danger-bg); }
+ 
+.file-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  background: rgba(74,124,138,0.08);
+  border: 1px solid rgba(74,124,138,0.2);
+  border-radius: 20px;
+  font-size: 11px;
+  color: var(--secondary);
+  cursor: pointer;
+  margin: 2px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+ 
+.file-chip:hover { background: rgba(74,124,138,0.15); }
+ 
 /* Toast */
-.toast { position: fixed; bottom: 24px; right: 24px; background: var(--accent); color: #fff; padding: 12px 18px; border-radius: 8px; font-size: 13px; z-index: 999; transform: translateY(80px); opacity: 0; transition: all 0.25s; pointer-events: none; }
+.toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: var(--gradient-1);
+  color: #fff;
+  padding: 13px 22px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 500;
+  z-index: 999;
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  pointer-events: none;
+  box-shadow: 0 8px 30px rgba(45,90,135,0.3);
+}
+ 
 .toast.show { transform: translateY(0); opacity: 1; }
-.toast.error { background: var(--danger); }
-
+.toast.error { background: linear-gradient(135deg, #c0392b, #e74c3c); box-shadow: 0 8px 30px rgba(192,57,43,0.3); }
+ 
 /* Loading */
-.loading { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 13px; padding: 40px; justify-content: center; }
-.spinner { width: 16px; height: 16px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; }
+.loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-faint);
+  font-size: 13px;
+  padding: 48px;
+  justify-content: center;
+}
+ 
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border);
+  border-top-color: var(--secondary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+ 
 @keyframes spin { to { transform: rotate(360deg); } }
-
-/* Dashboard quick rows */
-.dash-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.dash-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-.dash-card-header { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-.dash-card table th { font-size: 10px; padding: 8px 12px; }
-.dash-card table td { padding: 10px 12px; font-size: 12px; }
-
+ 
+/* Dashboard */
+.dash-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+ 
+.dash-card {
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(45,90,135,0.06);
+}
+ 
+.dash-card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(247,248,252,0.6);
+}
+ 
+.dash-card table th { font-size: 10px; padding: 10px 14px; }
+.dash-card table td { padding: 11px 14px; font-size: 12.5px; }
+ 
 /* Responsive */
 @media (max-width: 900px) {
   .stats-grid { grid-template-columns: 1fr 1fr; }
   .dash-row { grid-template-columns: 1fr; }
   .form-grid { grid-template-columns: 1fr; }
 }
+ 
 @media (max-width: 700px) {
-  .sidebar { width: 52px; }
-  .nav-item span, .sidebar-logo p, .sidebar-logo h1, .nav-count, .sidebar-footer { display: none; }
-  .sidebar-logo { padding: 16px 14px; }
-  .nav-item { padding: 12px 14px; justify-content: center; }
+  .sidebar { width: 60px; }
+  .nav-item span, .sidebar-logo p, .sidebar-logo h1, .nav-count, .sidebar-footer span { display: none; }
+  .sidebar-logo { padding: 18px 16px; }
+  .nav-item { padding: 13px; justify-content: center; border-radius: 10px; }
+  .content { padding: 20px; }
+  .topbar { padding: 14px 20px; }
 }
 </style>
 </head>
 <body>
-
+ 
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+ 
 <div class="shell">
   <!-- Sidebar -->
   <aside class="sidebar">
     <div class="sidebar-logo">
-      <h1>GOVCON CRM</h1>
+      <h1>GovCon CRM</h1>
       <p>Contracting Pipeline</p>
     </div>
     <nav class="sidebar-nav">
       <div class="nav-item active" onclick="goto('dashboard')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
         <span>Dashboard</span>
       </div>
       <div class="nav-item" onclick="goto('opportunities')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         <span>Opportunities</span>
         <span class="nav-count" id="opp-count">0</span>
       </div>
       <div class="nav-item" onclick="goto('contacts')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         <span>Contacts</span>
         <span class="nav-count" id="con-count">0</span>
       </div>
       <div class="nav-item" onclick="goto('tasks')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
         <span>Tasks</span>
         <span class="nav-count" id="task-count">0</span>
       </div>
     </nav>
-    <div class="sidebar-footer"><span class="conn-dot"></span>Supabase connected</div>
+    <div class="sidebar-footer">
+      <div class="conn-dot"></div>
+      <span>Supabase connected</span>
+    </div>
   </aside>
-
+ 
   <div class="main">
     <div class="topbar">
       <div>
@@ -208,7 +682,7 @@ textarea { resize: vertical; min-height: 72px; }
       <div id="topbar-action"></div>
     </div>
     <div class="content">
-
+ 
       <!-- DASHBOARD -->
       <div id="page-dashboard" class="page active">
         <div class="stats-grid">
@@ -228,7 +702,7 @@ textarea { resize: vertical; min-height: 72px; }
           </div>
         </div>
       </div>
-
+ 
       <!-- OPPORTUNITIES -->
       <div id="page-opportunities" class="page">
         <div class="section-header">
@@ -255,7 +729,7 @@ textarea { resize: vertical; min-height: 72px; }
           </table>
         </div>
       </div>
-
+ 
       <!-- CONTACTS -->
       <div id="page-contacts" class="page">
         <div class="section-header">
@@ -274,11 +748,11 @@ textarea { resize: vertical; min-height: 72px; }
           </table>
         </div>
       </div>
-
+ 
       <!-- TASKS -->
       <div id="page-tasks" class="page">
         <div class="section-header">
-          <span class="section-title">Tasks & follow-ups</span>
+          <span class="section-title">Tasks &amp; follow-ups</span>
           <button class="btn btn-primary" onclick="openTaskModal()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Add task
@@ -293,18 +767,18 @@ textarea { resize: vertical; min-height: 72px; }
           </table>
         </div>
       </div>
-
+ 
     </div>
   </div>
 </div>
-
+ 
 <!-- OPPORTUNITY MODAL -->
 <div class="modal-overlay" id="opp-modal">
   <div class="modal">
     <div class="modal-header">
       <span class="modal-title" id="opp-modal-title">Add opportunity</span>
       <button class="modal-close" onclick="closeModal('opp-modal')">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
     <div class="modal-body">
@@ -351,7 +825,7 @@ textarea { resize: vertical; min-height: 72px; }
           <label>Attachments</label>
           <div class="file-zone" id="file-zone" onclick="document.getElementById('file-input').click()" ondragover="fileDragOver(event)" ondragleave="fileDragLeave(event)" ondrop="fileDrop(event)">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--text-faint)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            <p>Click to upload or drag & drop</p>
+            <p>Click to upload or drag &amp; drop</p>
             <small>PDF, DOCX, XLSX, PNG, JPG — any format</small>
           </div>
           <input type="file" id="file-input" multiple style="display:none" onchange="filesSelected(this.files)">
@@ -365,14 +839,14 @@ textarea { resize: vertical; min-height: 72px; }
     </div>
   </div>
 </div>
-
+ 
 <!-- CONTACT MODAL -->
 <div class="modal-overlay" id="con-modal">
   <div class="modal">
     <div class="modal-header">
       <span class="modal-title" id="con-modal-title">Add contact</span>
       <button class="modal-close" onclick="closeModal('con-modal')">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
     <div class="modal-body">
@@ -430,14 +904,14 @@ textarea { resize: vertical; min-height: 72px; }
     </div>
   </div>
 </div>
-
+ 
 <!-- TASK MODAL -->
 <div class="modal-overlay" id="task-modal">
   <div class="modal">
     <div class="modal-header">
       <span class="modal-title">Add task</span>
       <button class="modal-close" onclick="closeModal('task-modal')">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
     <div class="modal-body">
@@ -479,26 +953,24 @@ textarea { resize: vertical; min-height: 72px; }
     </div>
   </div>
 </div>
-
+ 
 <div class="toast" id="toast"></div>
-
+ 
 <script>
 const SUPA_URL = 'https://gfphdbuxszzxezdogpgl.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdmcGhkYnV4c3p6eGV6ZG9ncGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwMTA4MDAsImV4cCI6MjA5NTU4NjgwMH0.ACJqaXk9GKyo9HsIitKtQt-O22diLcSMhy2MLN0LDh4';
 const H = { 'Content-Type': 'application/json', 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Prefer': 'return=representation' };
-
+ 
 let opps = [], contacts = [], tasks = [], oppFiles = {};
-let pendingFiles = []; // files queued for upload
-
-// ── API helpers ──────────────────────────────────────────
+let pendingFiles = [];
+ 
 async function db(path, opts = {}) {
   const r = await fetch(SUPA_URL + '/rest/v1/' + path, { headers: H, ...opts });
   if (!r.ok) { const e = await r.text(); throw new Error(e); }
   return r.status === 204 ? null : r.json();
 }
-
+ 
 async function uploadFile(oppId, file) {
-  const ext = file.name.split('.').pop();
   const path = `${oppId}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;
   const r = await fetch(`${SUPA_URL}/storage/v1/object/opportunity-files/${path}`, {
     method: 'POST',
@@ -508,7 +980,7 @@ async function uploadFile(oppId, file) {
   if (!r.ok) throw new Error(await r.text());
   await db('opportunity_files', { method: 'POST', body: JSON.stringify({ opportunity_id: oppId, file_name: file.name, file_path: path, file_size: file.size, mime_type: file.type }) });
 }
-
+ 
 async function getFileUrl(path) {
   const r = await fetch(`${SUPA_URL}/storage/v1/object/sign/opportunity-files/${path}`, {
     method: 'POST', headers: H, body: JSON.stringify({ expiresIn: 3600 })
@@ -516,11 +988,10 @@ async function getFileUrl(path) {
   const d = await r.json();
   return SUPA_URL + '/storage/v1' + d.signedURL;
 }
-
-// ── Navigation ───────────────────────────────────────────
+ 
 const pages = { dashboard: 'Dashboard', opportunities: 'Opportunities', contacts: 'Contacts', tasks: 'Tasks & Follow-ups' };
 const subs = { dashboard: 'Government contracting pipeline overview', opportunities: 'Active bids, proposals, and pipeline', contacts: 'Agency officials, COs, teaming partners', tasks: 'Reminders, deadlines, action items' };
-
+ 
 function goto(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -529,30 +1000,27 @@ function goto(name) {
   document.getElementById('page-title').textContent = pages[name];
   document.getElementById('page-sub').textContent = subs[name];
 }
-
-// ── Toast ────────────────────────────────────────────────
+ 
 function toast(msg, err = false) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.className = 'toast show' + (err ? ' error' : '');
   setTimeout(() => t.className = 'toast', 2800);
 }
-
-// ── Modal helpers ─────────────────────────────────────────
+ 
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); pendingFiles = []; document.getElementById('file-list').innerHTML = ''; }
 document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
-
-// ── File handling ─────────────────────────────────────────
+ 
 function fileDragOver(e) { e.preventDefault(); document.getElementById('file-zone').classList.add('dragover'); }
 function fileDragLeave(e) { document.getElementById('file-zone').classList.remove('dragover'); }
 function fileDrop(e) { e.preventDefault(); fileDragLeave(); filesSelected(e.dataTransfer.files); }
-
+ 
 function filesSelected(files) {
   Array.from(files).forEach(f => { if (!pendingFiles.find(p => p.name === f.name)) pendingFiles.push(f); });
   renderFileList();
 }
-
+ 
 function renderFileList() {
   const el = document.getElementById('file-list');
   el.innerHTML = pendingFiles.map((f, i) => `
@@ -560,29 +1028,26 @@ function renderFileList() {
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:var(--text-muted)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
       <span class="file-item-name">${f.name}</span>
       <span class="file-item-size">${(f.size/1024).toFixed(0)}KB</span>
-      <button class="file-item-del" onclick="removeFile(${i})">✕</button>
+      <button class="file-item-del" onclick="removeFile(${i})">&#x2715;</button>
     </div>`).join('');
 }
-
+ 
 function removeFile(i) { pendingFiles.splice(i, 1); renderFileList(); }
-
-// ── OPPORTUNITIES ─────────────────────────────────────────
+ 
 async function loadOpps() {
   opps = await db('opportunities?order=created_at.desc&select=*');
   const files = await db('opportunity_files?select=*');
   oppFiles = {};
   files.forEach(f => { if (!oppFiles[f.opportunity_id]) oppFiles[f.opportunity_id] = []; oppFiles[f.opportunity_id].push(f); });
-  renderOpps();
-  updateCounts();
-  renderDashboard();
+  renderOpps(); updateCounts(); renderDashboard();
 }
-
+ 
 function renderOpps() {
   const tb = document.getElementById('opp-tbody');
   if (!opps.length) { tb.innerHTML = '<tr class="empty-row"><td colspan="7">No opportunities yet — add your first one</td></tr>'; return; }
   tb.innerHTML = opps.map(o => {
     const files = oppFiles[o.id] || [];
-    const fileHtml = files.length ? files.map(f => `<a class="file-chip" onclick="openFile('${f.file_path}')">📎 ${f.file_name.length > 18 ? f.file_name.slice(0,16)+'…' : f.file_name}</a>`).join('') : '<span style="color:var(--text-faint);font-size:11px">—</span>';
+    const fileHtml = files.length ? files.map(f => `<a class="file-chip" onclick="openFile('${f.file_path}')">&#128206; ${f.file_name.length > 18 ? f.file_name.slice(0,16)+'...' : f.file_name}</a>`).join('') : '<span style="color:var(--text-faint);font-size:11px">—</span>';
     return `<tr>
       <td><div style="font-weight:500">${esc(o.rfq)}</div>${o.solicitation_id ? `<div class="td-mono" style="font-size:11px;color:var(--text-muted);margin-top:2px">${esc(o.solicitation_id)}</div>` : ''}</td>
       <td class="td-mono">${esc(o.part_number||'—')}</td>
@@ -597,8 +1062,8 @@ function renderOpps() {
     </tr>`;
   }).join('');
 }
-
-function openOppModal(id) {
+ 
+function openOppModal() {
   document.getElementById('opp-id').value = '';
   document.getElementById('opp-rfq').value = '';
   document.getElementById('opp-sol').value = '';
@@ -612,7 +1077,7 @@ function openOppModal(id) {
   pendingFiles = []; document.getElementById('file-list').innerHTML = '';
   openModal('opp-modal');
 }
-
+ 
 function editOpp(id) {
   const o = opps.find(x => x.id === id);
   if (!o) return;
@@ -629,7 +1094,7 @@ function editOpp(id) {
   pendingFiles = []; document.getElementById('file-list').innerHTML = '';
   openModal('opp-modal');
 }
-
+ 
 async function saveOpportunity() {
   const rfq = document.getElementById('opp-rfq').value.trim();
   if (!rfq) { toast('RFQ is required', true); return; }
@@ -647,37 +1112,31 @@ async function saveOpportunity() {
   const id = document.getElementById('opp-id').value;
   try {
     let oppId = id;
-    if (id) {
-      await db('opportunities?id=eq.'+id, { method: 'PATCH', body: JSON.stringify(payload) });
-    } else {
-      const res = await db('opportunities', { method: 'POST', body: JSON.stringify(payload) });
-      oppId = res[0].id;
-    }
+    if (id) { await db('opportunities?id=eq.'+id, { method: 'PATCH', body: JSON.stringify(payload) }); }
+    else { const res = await db('opportunities', { method: 'POST', body: JSON.stringify(payload) }); oppId = res[0].id; }
     for (const f of pendingFiles) await uploadFile(oppId, f);
     toast(id ? 'Opportunity updated' : 'Opportunity added');
-    closeModal('opp-modal');
-    await loadOpps();
+    closeModal('opp-modal'); await loadOpps();
   } catch(e) { toast('Error: ' + e.message, true); }
   btn.textContent = 'Save opportunity'; btn.disabled = false;
 }
-
+ 
 async function deleteOpp(id) {
   if (!confirm('Delete this opportunity and all its files?')) return;
   await db('opportunities?id=eq.'+id, { method: 'DELETE' });
   toast('Deleted'); await loadOpps();
 }
-
+ 
 async function openFile(path) {
   try { const url = await getFileUrl(path); window.open(url, '_blank'); }
   catch(e) { toast('Could not open file', true); }
 }
-
-// ── CONTACTS ──────────────────────────────────────────────
+ 
 async function loadContacts() {
   contacts = await db('contacts?order=created_at.desc');
   renderContacts(); updateCounts();
 }
-
+ 
 function renderContacts() {
   const tb = document.getElementById('con-tbody');
   if (!contacts.length) { tb.innerHTML = '<tr class="empty-row"><td colspan="6">No contacts yet</td></tr>'; return; }
@@ -685,7 +1144,7 @@ function renderContacts() {
     <td><div style="font-weight:500">${esc(c.name)}</div></td>
     <td>${esc(c.agency||'—')}</td>
     <td style="color:var(--text-muted)">${esc(c.title||'—')}</td>
-    <td class="td-mono">${c.email ? `<a href="mailto:${esc(c.email)}" style="color:var(--accent)">${esc(c.email)}</a>` : '—'}</td>
+    <td class="td-mono">${c.email ? `<a href="mailto:${esc(c.email)}" style="color:var(--secondary)">${esc(c.email)}</a>` : '—'}</td>
     <td>${c.relationship ? `<span class="badge badge-active">${esc(c.relationship)}</span>` : '—'}</td>
     <td><div class="actions">
       <button class="btn btn-ghost btn-sm" onclick="editCon('${c.id}')">Edit</button>
@@ -693,14 +1152,14 @@ function renderContacts() {
     </div></td>
   </tr>`).join('');
 }
-
+ 
 function openConModal() {
   ['con-id','con-name','con-title','con-agency','con-email','con-phone','con-linkedin','con-notes','con-last'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('con-rel').value = '';
   document.getElementById('con-modal-title').textContent = 'Add contact';
   openModal('con-modal');
 }
-
+ 
 function editCon(id) {
   const c = contacts.find(x => x.id === id); if (!c) return;
   document.getElementById('con-id').value = c.id;
@@ -716,7 +1175,7 @@ function editCon(id) {
   document.getElementById('con-modal-title').textContent = 'Edit contact';
   openModal('con-modal');
 }
-
+ 
 async function saveContact() {
   const name = document.getElementById('con-name').value.trim();
   if (!name) { toast('Name is required', true); return; }
@@ -729,19 +1188,18 @@ async function saveContact() {
     closeModal('con-modal'); await loadContacts();
   } catch(e) { toast('Error: ' + e.message, true); }
 }
-
+ 
 async function deleteCon(id) {
   if (!confirm('Delete this contact?')) return;
   await db('contacts?id=eq.'+id, { method: 'DELETE' });
   toast('Deleted'); await loadContacts();
 }
-
-// ── TASKS ─────────────────────────────────────────────────
+ 
 async function loadTasks() {
   tasks = await db('tasks?order=due_date.asc.nullslast');
   renderTasks(); updateCounts();
 }
-
+ 
 function renderTasks() {
   const tb = document.getElementById('task-tbody');
   if (!tasks.length) { tb.innerHTML = '<tr class="empty-row"><td colspan="6">No tasks yet</td></tr>'; return; }
@@ -749,8 +1207,8 @@ function renderTasks() {
     const opp = opps.find(o => o.id === t.opportunity_id);
     const con = contacts.find(c => c.id === t.contact_id);
     const linked = [opp ? `RFQ: ${opp.rfq}` : '', con ? con.name : ''].filter(Boolean).join(' · ') || '—';
-    return `<tr style="${t.done ? 'opacity:0.5' : ''}">
-      <td><span style="${t.done ? 'text-decoration:line-through' : ''}">${esc(t.task)}</span></td>
+    return `<tr style="${t.done ? 'opacity:0.45' : ''}">
+      <td><span style="${t.done ? 'text-decoration:line-through;color:var(--text-faint)' : ''}">${esc(t.task)}</span></td>
       <td class="td-mono">${t.due_date ? fmtDate(t.due_date) : '—'}</td>
       <td><span class="badge badge-${(t.priority||'medium').toLowerCase()}">${esc(t.priority||'Medium')}</span></td>
       <td style="font-size:12px;color:var(--text-muted)">${linked}</td>
@@ -761,7 +1219,7 @@ function renderTasks() {
     </tr>`;
   }).join('');
 }
-
+ 
 function openTaskModal() {
   ['task-id','task-name','task-due','task-notes'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('task-priority').value = 'Medium';
@@ -771,7 +1229,7 @@ function openTaskModal() {
   cs.innerHTML = '<option value="">None</option>' + contacts.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
   openModal('task-modal');
 }
-
+ 
 async function saveTask() {
   const task = document.getElementById('task-name').value.trim();
   if (!task) { toast('Task is required', true); return; }
@@ -783,37 +1241,35 @@ async function saveTask() {
     toast('Task saved'); closeModal('task-modal'); await loadTasks();
   } catch(e) { toast('Error: ' + e.message, true); }
 }
-
+ 
 async function toggleTask(id, done) {
   await db('tasks?id=eq.'+id, { method: 'PATCH', body: JSON.stringify({ done }) });
   await loadTasks();
 }
-
+ 
 async function deleteTask(id) {
   if (!confirm('Delete this task?')) return;
   await db('tasks?id=eq.'+id, { method: 'DELETE' });
   toast('Deleted'); await loadTasks();
 }
-
-// ── Dashboard ─────────────────────────────────────────────
+ 
 function renderDashboard() {
   document.getElementById('d-opps').textContent = opps.length;
   document.getElementById('d-active').textContent = opps.filter(o => o.status === 'Active').length;
   document.getElementById('d-cons').textContent = contacts.length;
   document.getElementById('d-tasks').textContent = tasks.filter(t => !t.done).length;
-
+ 
   const recent = opps.slice(0,5);
   const doEl = document.getElementById('dash-opps');
-  if (!recent.length) { doEl.innerHTML = '<p style="padding:20px;color:var(--text-faint);font-size:13px">No opportunities yet</p>'; }
+  if (!recent.length) { doEl.innerHTML = '<p style="padding:24px;color:var(--text-faint);font-size:13px;text-align:center">No opportunities yet</p>'; }
   else doEl.innerHTML = `<table><thead><tr><th>RFQ</th><th>Status</th></tr></thead><tbody>${recent.map(o=>`<tr><td>${esc(o.rfq)}</td><td><span class="badge badge-${(o.status||'active').toLowerCase()}">${esc(o.status||'Active')}</span></td></tr>`).join('')}</tbody></table>`;
-
+ 
   const deadlines = opps.filter(o => o.submission_date && o.status === 'Active').sort((a,b) => a.submission_date.localeCompare(b.submission_date)).slice(0,5);
   const ddEl = document.getElementById('dash-deadlines');
-  if (!deadlines.length) { ddEl.innerHTML = '<p style="padding:20px;color:var(--text-faint);font-size:13px">No upcoming deadlines</p>'; }
+  if (!deadlines.length) { ddEl.innerHTML = '<p style="padding:24px;color:var(--text-faint);font-size:13px;text-align:center">No upcoming deadlines</p>'; }
   else ddEl.innerHTML = `<table><thead><tr><th>RFQ</th><th>Due</th></tr></thead><tbody>${deadlines.map(o=>`<tr><td>${esc(o.rfq)}</td><td class="td-mono">${fmtDate(o.submission_date)}</td></tr>`).join('')}</tbody></table>`;
 }
-
-// ── Counts ────────────────────────────────────────────────
+ 
 function updateCounts() {
   document.getElementById('opp-count').textContent = opps.length;
   document.getElementById('con-count').textContent = contacts.length;
@@ -822,12 +1278,10 @@ function updateCounts() {
   document.getElementById('d-cons').textContent = contacts.length;
   document.getElementById('d-opps').textContent = opps.length;
 }
-
-// ── Utils ─────────────────────────────────────────────────
+ 
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function fmtDate(d) { if (!d) return '—'; const [y,m,day] = d.split('-'); return `${m}/${day}/${y}`; }
-
-// ── Init ──────────────────────────────────────────────────
+ 
 async function init() {
   await Promise.all([loadOpps(), loadContacts(), loadTasks()]);
   renderDashboard();
