@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GovCon CRM</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f4f3ef;
+  --surface: #ffffff;
+  --border: #dddbd4;
+  --border-strong: #b8b5ac;
+  --text: #1a1917;
+  --text-muted: #6b6860;
+  --text-faint: #9e9b93;
+  --accent: #1a3a2a;
+  --accent-light: #2d6648;
+  --accent-bg: #e8f0eb;
+  --accent-border: #a8c9b4;
+  --danger: #8b2e2e;
+  --danger-bg: #f5eaea;
+  --warning: #7a5200;
+  --warning-bg: #fef3dc;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
+
+/* Layout */
+.shell { display: flex; min-height: 100vh; }
+.sidebar { width: 220px; background: var(--accent); color: #fff; display: flex; flex-direction: column; flex-shrink: 0; position: sticky; top: 0; height: 100vh; }
+.sidebar-logo { padding: 24px 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.sidebar-logo h1 { font-family: var(--mono); font-size: 13px; font-weight: 500; letter-spacing: 0.08em; color: #fff; }
+.sidebar-logo p { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+.sidebar-nav { flex: 1; padding: 12px 0; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 20px; font-size: 13px; color: rgba(255,255,255,0.7); cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; }
+.nav-item:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.nav-item.active { background: rgba(255,255,255,0.12); color: #fff; border-left-color: #7dc99a; }
+.nav-item svg { width: 15px; height: 15px; flex-shrink: 0; }
+.nav-count { margin-left: auto; background: rgba(255,255,255,0.15); border-radius: 10px; padding: 1px 7px; font-size: 11px; font-family: var(--mono); }
+.sidebar-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: rgba(255,255,255,0.4); font-family: var(--mono); }
+.conn-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #7dc99a; margin-right: 6px; }
+
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; }
+.topbar-title { font-size: 15px; font-weight: 600; }
+.topbar-sub { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+.content { flex: 1; padding: 28px; overflow-y: auto; }
+
+/* Tabs / pages */
+.page { display: none; }
+.page.active { display: block; }
+
+/* Stats */
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+.stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; font-family: var(--mono); }
+.stat-val { font-size: 28px; font-weight: 600; font-family: var(--mono); margin-top: 4px; color: var(--accent); }
+
+/* Section headers */
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.section-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); font-family: var(--mono); }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 6px; font-size: 13px; font-family: var(--sans); font-weight: 500; cursor: pointer; border: 1px solid transparent; transition: all 0.15s; }
+.btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-primary:hover { background: var(--accent-light); }
+.btn-ghost { background: transparent; color: var(--text-muted); border-color: var(--border); }
+.btn-ghost:hover { background: var(--bg); color: var(--text); }
+.btn-danger { background: var(--danger-bg); color: var(--danger); border-color: #e8c5c5; }
+.btn-danger:hover { background: #eecece; }
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+.btn svg { width: 14px; height: 14px; }
+
+/* Table */
+.table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+table { width: 100%; border-collapse: collapse; }
+th { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); padding: 10px 16px; text-align: left; background: var(--bg); border-bottom: 1px solid var(--border); font-family: var(--mono); }
+td { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #fafaf8; }
+.td-mono { font-family: var(--mono); font-size: 12px; }
+.empty-row td { text-align: center; color: var(--text-faint); padding: 40px; font-size: 13px; }
+
+/* Badges */
+.badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; font-family: var(--mono); }
+.badge-active { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border); }
+.badge-won { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+.badge-lost { background: var(--danger-bg); color: var(--danger); border: 1px solid #e8c5c5; }
+.badge-pending { background: var(--warning-bg); color: var(--warning); border: 1px solid #f0d495; }
+.badge-high { background: var(--danger-bg); color: var(--danger); border: 1px solid #e8c5c5; }
+.badge-medium { background: var(--warning-bg); color: var(--warning); border: 1px solid #f0d495; }
+.badge-low { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border); }
+
+/* Actions cell */
+.actions { display: flex; gap: 6px; }
+
+/* Modal */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,10,8,0.5); z-index: 100; align-items: center; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--surface); border-radius: 12px; width: 560px; max-width: 95vw; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+.modal-header { padding: 20px 24px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-size: 15px; font-weight: 600; }
+.modal-close { background: none; border: none; cursor: pointer; color: var(--text-muted); padding: 4px; border-radius: 4px; }
+.modal-close:hover { background: var(--bg); }
+.modal-body { padding: 20px 24px; }
+.modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+
+/* Form */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-full { grid-column: 1 / -1; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+label { font-size: 12px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--mono); }
+label .req { color: var(--danger); }
+input, select, textarea { font-family: var(--sans); font-size: 13px; padding: 8px 11px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; width: 100%; }
+input:focus, select:focus, textarea:focus { border-color: var(--accent-light); box-shadow: 0 0 0 3px rgba(45,102,72,0.1); }
+textarea { resize: vertical; min-height: 72px; }
+.hint { font-size: 11px; color: var(--text-faint); font-family: var(--mono); }
+
+/* File upload */
+.file-zone { border: 1.5px dashed var(--border-strong); border-radius: 8px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.15s; }
+.file-zone:hover, .file-zone.dragover { border-color: var(--accent-light); background: var(--accent-bg); }
+.file-zone p { font-size: 13px; color: var(--text-muted); margin-top: 6px; }
+.file-zone small { font-size: 11px; color: var(--text-faint); font-family: var(--mono); }
+.file-list { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+.file-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: var(--bg); border-radius: 6px; border: 1px solid var(--border); }
+.file-item-name { flex: 1; font-size: 12px; font-family: var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-item-size { font-size: 11px; color: var(--text-faint); font-family: var(--mono); }
+.file-item-del { background: none; border: none; cursor: pointer; color: var(--text-faint); padding: 2px; }
+.file-item-del:hover { color: var(--danger); }
+
+/* Attached files in table */
+.file-chip { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; font-size: 11px; font-family: var(--mono); color: var(--text-muted); cursor: pointer; margin: 2px 2px 2px 0; text-decoration: none; }
+.file-chip:hover { border-color: var(--accent-light); color: var(--accent); }
+
+/* Toast */
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--accent); color: #fff; padding: 12px 18px; border-radius: 8px; font-size: 13px; z-index: 999; transform: translateY(80px); opacity: 0; transition: all 0.25s; pointer-events: none; }
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.error { background: var(--danger); }
+
+/* Loading */
+.loading { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 13px; padding: 40px; justify-content: center; }
+.spinner { width: 16px; height: 16px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Dashboard quick rows */
+.dash-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.dash-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.dash-card-header { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.dash-card table th { font-size: 10px; padding: 8px 12px; }
+.dash-card table td { padding: 10px 12px; font-size: 12px; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .dash-row { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 700px) {
+  .sidebar { width: 52px; }
+  .nav-item span, .sidebar-logo p, .sidebar-logo h1, .nav-count, .sidebar-footer { display: none; }
+  .sidebar-logo { padding: 16px 14px; }
+  .nav-item { padding: 12px 14px; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <h1>GOVCON CRM</h1>
+      <p>Contracting Pipeline</p>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-item active" onclick="goto('dashboard')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        <span>Dashboard</span>
+      </div>
+      <div class="nav-item" onclick="goto('opportunities')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Opportunities</span>
+        <span class="nav-count" id="opp-count">0</span>
+      </div>
+      <div class="nav-item" onclick="goto('contacts')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>Contacts</span>
+        <span class="nav-count" id="con-count">0</span>
+      </div>
+      <div class="nav-item" onclick="goto('tasks')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <span>Tasks</span>
+        <span class="nav-count" id="task-count">0</span>
+      </div>
+    </nav>
+    <div class="sidebar-footer"><span class="conn-dot"></span>Supabase connected</div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar-title" id="page-title">Dashboard</div>
+        <div class="topbar-sub" id="page-sub">Government contracting pipeline overview</div>
+      </div>
+      <div id="topbar-action"></div>
+    </div>
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div id="page-dashboard" class="page active">
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-label">Opportunities</div><div class="stat-val" id="d-opps">—</div></div>
+          <div class="stat-card"><div class="stat-label">Active RFQs</div><div class="stat-val" id="d-active">—</div></div>
+          <div class="stat-card"><div class="stat-label">Contacts</div><div class="stat-val" id="d-cons">—</div></div>
+          <div class="stat-card"><div class="stat-label">Open Tasks</div><div class="stat-val" id="d-tasks">—</div></div>
+        </div>
+        <div class="dash-row">
+          <div class="dash-card">
+            <div class="dash-card-header"><span class="section-title">Recent Opportunities</span></div>
+            <div id="dash-opps"><div class="loading"><div class="spinner"></div> Loading…</div></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-header"><span class="section-title">Upcoming Deadlines</span></div>
+            <div id="dash-deadlines"><div class="loading"><div class="spinner"></div> Loading…</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OPPORTUNITIES -->
+      <div id="page-opportunities" class="page">
+        <div class="section-header">
+          <span class="section-title">All opportunities</span>
+          <button class="btn btn-primary" onclick="openOppModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add opportunity
+          </button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>RFQ / Solicitation</th>
+                <th>Part / NSN</th>
+                <th>Qty</th>
+                <th>Submission</th>
+                <th>Status</th>
+                <th>Files</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="opp-tbody"><tr class="empty-row"><td colspan="7"><div class="loading"><div class="spinner"></div> Loading…</div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CONTACTS -->
+      <div id="page-contacts" class="page">
+        <div class="section-header">
+          <span class="section-title">All contacts</span>
+          <button class="btn btn-primary" onclick="openConModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add contact
+          </button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Name</th><th>Agency</th><th>Title</th><th>Email</th><th>Relationship</th><th></th></tr>
+            </thead>
+            <tbody id="con-tbody"><tr class="empty-row"><td colspan="6"><div class="loading"><div class="spinner"></div> Loading…</div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TASKS -->
+      <div id="page-tasks" class="page">
+        <div class="section-header">
+          <span class="section-title">Tasks & follow-ups</span>
+          <button class="btn btn-primary" onclick="openTaskModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add task
+          </button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Task</th><th>Due date</th><th>Priority</th><th>Linked to</th><th>Done</th><th></th></tr>
+            </thead>
+            <tbody id="task-tbody"><tr class="empty-row"><td colspan="6"><div class="loading"><div class="spinner"></div> Loading…</div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- OPPORTUNITY MODAL -->
+<div class="modal-overlay" id="opp-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="opp-modal-title">Add opportunity</span>
+      <button class="modal-close" onclick="closeModal('opp-modal')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="opp-id">
+      <div class="form-grid">
+        <div class="form-group form-full">
+          <label>RFQ <span class="req">*</span></label>
+          <input type="text" id="opp-rfq" placeholder="RFQ number or description">
+        </div>
+        <div class="form-group">
+          <label>Solicitation ID</label>
+          <input type="text" id="opp-sol" placeholder="e.g. W911QY-24-Q-0042">
+        </div>
+        <div class="form-group">
+          <label>Part number / NSN</label>
+          <input type="text" id="opp-pn" placeholder="e.g. NSN 1234-56-789-0123">
+        </div>
+        <div class="form-group">
+          <label>Amount (qty)</label>
+          <input type="number" id="opp-qty" placeholder="100">
+        </div>
+        <div class="form-group">
+          <label>Units</label>
+          <input type="text" id="opp-units" placeholder="ea, lot, case…">
+        </div>
+        <div class="form-group">
+          <label>Submission date</label>
+          <input type="date" id="opp-date">
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="opp-status">
+            <option value="Active">Active</option>
+            <option value="Pending">Pending</option>
+            <option value="Won">Won</option>
+            <option value="Lost">Lost</option>
+          </select>
+        </div>
+        <div class="form-group form-full">
+          <label>Notes</label>
+          <textarea id="opp-notes" placeholder="Any notes about this opportunity…"></textarea>
+        </div>
+        <div class="form-group form-full">
+          <label>Attachments</label>
+          <div class="file-zone" id="file-zone" onclick="document.getElementById('file-input').click()" ondragover="fileDragOver(event)" ondragleave="fileDragLeave(event)" ondrop="fileDrop(event)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--text-faint)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <p>Click to upload or drag & drop</p>
+            <small>PDF, DOCX, XLSX, PNG, JPG — any format</small>
+          </div>
+          <input type="file" id="file-input" multiple style="display:none" onchange="filesSelected(this.files)">
+          <div class="file-list" id="file-list"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('opp-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveOpportunity()" id="opp-save-btn">Save opportunity</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT MODAL -->
+<div class="modal-overlay" id="con-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="con-modal-title">Add contact</span>
+      <button class="modal-close" onclick="closeModal('con-modal')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="con-id">
+      <div class="form-grid">
+        <div class="form-group form-full">
+          <label>Full name <span class="req">*</span></label>
+          <input type="text" id="con-name" placeholder="Full name">
+        </div>
+        <div class="form-group">
+          <label>Title / role</label>
+          <input type="text" id="con-title" placeholder="Contracting Officer">
+        </div>
+        <div class="form-group">
+          <label>Agency</label>
+          <input type="text" id="con-agency" placeholder="DoD, GSA, DLA…">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="con-email" placeholder="email@agency.gov">
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" id="con-phone" placeholder="(555) 000-0000">
+        </div>
+        <div class="form-group">
+          <label>Relationship</label>
+          <select id="con-rel">
+            <option value="">Select…</option>
+            <option>Warm lead</option>
+            <option>Active contact</option>
+            <option>Decision maker</option>
+            <option>Teaming partner</option>
+            <option>Subcontractor</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Last contacted</label>
+          <input type="date" id="con-last">
+        </div>
+        <div class="form-group form-full">
+          <label>LinkedIn / Website</label>
+          <input type="text" id="con-linkedin" placeholder="https://…">
+        </div>
+        <div class="form-group form-full">
+          <label>Notes</label>
+          <textarea id="con-notes"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('con-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveContact()">Save contact</button>
+    </div>
+  </div>
+</div>
+
+<!-- TASK MODAL -->
+<div class="modal-overlay" id="task-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Add task</span>
+      <button class="modal-close" onclick="closeModal('task-modal')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="task-id">
+      <div class="form-grid">
+        <div class="form-group form-full">
+          <label>Task <span class="req">*</span></label>
+          <input type="text" id="task-name" placeholder="What needs to happen?">
+        </div>
+        <div class="form-group">
+          <label>Due date</label>
+          <input type="date" id="task-due">
+        </div>
+        <div class="form-group">
+          <label>Priority</label>
+          <select id="task-priority">
+            <option>High</option>
+            <option selected>Medium</option>
+            <option>Low</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Linked opportunity</label>
+          <select id="task-opp"><option value="">None</option></select>
+        </div>
+        <div class="form-group">
+          <label>Linked contact</label>
+          <select id="task-con"><option value="">None</option></select>
+        </div>
+        <div class="form-group form-full">
+          <label>Notes</label>
+          <textarea id="task-notes"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('task-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveTask()">Save task</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPA_URL = 'https://gfphdbuxszzxezdogpgl.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdmcGhkYnV4c3p6eGV6ZG9ncGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwMTA4MDAsImV4cCI6MjA5NTU4NjgwMH0.ACJqaXk9GKyo9HsIitKtQt-O22diLcSMhy2MLN0LDh4';
+const H = { 'Content-Type': 'application/json', 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Prefer': 'return=representation' };
+
+let opps = [], contacts = [], tasks = [], oppFiles = {};
+let pendingFiles = []; // files queued for upload
+
+// ── API helpers ──────────────────────────────────────────
+async function db(path, opts = {}) {
+  const r = await fetch(SUPA_URL + '/rest/v1/' + path, { headers: H, ...opts });
+  if (!r.ok) { const e = await r.text(); throw new Error(e); }
+  return r.status === 204 ? null : r.json();
+}
+
+async function uploadFile(oppId, file) {
+  const ext = file.name.split('.').pop();
+  const path = `${oppId}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;
+  const r = await fetch(`${SUPA_URL}/storage/v1/object/opportunity-files/${path}`, {
+    method: 'POST',
+    headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': file.type || 'application/octet-stream' },
+    body: file
+  });
+  if (!r.ok) throw new Error(await r.text());
+  await db('opportunity_files', { method: 'POST', body: JSON.stringify({ opportunity_id: oppId, file_name: file.name, file_path: path, file_size: file.size, mime_type: file.type }) });
+}
+
+async function getFileUrl(path) {
+  const r = await fetch(`${SUPA_URL}/storage/v1/object/sign/opportunity-files/${path}`, {
+    method: 'POST', headers: H, body: JSON.stringify({ expiresIn: 3600 })
+  });
+  const d = await r.json();
+  return SUPA_URL + '/storage/v1' + d.signedURL;
+}
+
+// ── Navigation ───────────────────────────────────────────
+const pages = { dashboard: 'Dashboard', opportunities: 'Opportunities', contacts: 'Contacts', tasks: 'Tasks & Follow-ups' };
+const subs = { dashboard: 'Government contracting pipeline overview', opportunities: 'Active bids, proposals, and pipeline', contacts: 'Agency officials, COs, teaming partners', tasks: 'Reminders, deadlines, action items' };
+
+function goto(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.nav-item')[['dashboard','opportunities','contacts','tasks'].indexOf(name)].classList.add('active');
+  document.getElementById('page-title').textContent = pages[name];
+  document.getElementById('page-sub').textContent = subs[name];
+}
+
+// ── Toast ────────────────────────────────────────────────
+function toast(msg, err = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (err ? ' error' : '');
+  setTimeout(() => t.className = 'toast', 2800);
+}
+
+// ── Modal helpers ─────────────────────────────────────────
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); pendingFiles = []; document.getElementById('file-list').innerHTML = ''; }
+document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
+
+// ── File handling ─────────────────────────────────────────
+function fileDragOver(e) { e.preventDefault(); document.getElementById('file-zone').classList.add('dragover'); }
+function fileDragLeave(e) { document.getElementById('file-zone').classList.remove('dragover'); }
+function fileDrop(e) { e.preventDefault(); fileDragLeave(); filesSelected(e.dataTransfer.files); }
+
+function filesSelected(files) {
+  Array.from(files).forEach(f => { if (!pendingFiles.find(p => p.name === f.name)) pendingFiles.push(f); });
+  renderFileList();
+}
+
+function renderFileList() {
+  const el = document.getElementById('file-list');
+  el.innerHTML = pendingFiles.map((f, i) => `
+    <div class="file-item">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:var(--text-muted)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span class="file-item-name">${f.name}</span>
+      <span class="file-item-size">${(f.size/1024).toFixed(0)}KB</span>
+      <button class="file-item-del" onclick="removeFile(${i})">✕</button>
+    </div>`).join('');
+}
+
+function removeFile(i) { pendingFiles.splice(i, 1); renderFileList(); }
+
+// ── OPPORTUNITIES ─────────────────────────────────────────
+async function loadOpps() {
+  opps = await db('opportunities?order=created_at.desc&select=*');
+  const files = await db('opportunity_files?select=*');
+  oppFiles = {};
+  files.forEach(f => { if (!oppFiles[f.opportunity_id]) oppFiles[f.opportunity_id] = []; oppFiles[f.opportunity_id].push(f); });
+  renderOpps();
+  updateCounts();
+  renderDashboard();
+}
+
+function renderOpps() {
+  const tb = document.getElementById('opp-tbody');
+  if (!opps.length) { tb.innerHTML = '<tr class="empty-row"><td colspan="7">No opportunities yet — add your first one</td></tr>'; return; }
+  tb.innerHTML = opps.map(o => {
+    const files = oppFiles[o.id] || [];
+    const fileHtml = files.length ? files.map(f => `<a class="file-chip" onclick="openFile('${f.file_path}')">📎 ${f.file_name.length > 18 ? f.file_name.slice(0,16)+'…' : f.file_name}</a>`).join('') : '<span style="color:var(--text-faint);font-size:11px">—</span>';
+    return `<tr>
+      <td><div style="font-weight:500">${esc(o.rfq)}</div>${o.solicitation_id ? `<div class="td-mono" style="font-size:11px;color:var(--text-muted);margin-top:2px">${esc(o.solicitation_id)}</div>` : ''}</td>
+      <td class="td-mono">${esc(o.part_number||'—')}</td>
+      <td>${o.qty ? `<span class="td-mono">${o.qty}</span> <span style="color:var(--text-muted)">${esc(o.units||'')}</span>` : '—'}</td>
+      <td class="td-mono">${o.submission_date ? fmtDate(o.submission_date) : '—'}</td>
+      <td><span class="badge badge-${(o.status||'active').toLowerCase()}">${esc(o.status||'Active')}</span></td>
+      <td>${fileHtml}</td>
+      <td><div class="actions">
+        <button class="btn btn-ghost btn-sm" onclick="editOpp('${o.id}')">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteOpp('${o.id}')">Del</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+function openOppModal(id) {
+  document.getElementById('opp-id').value = '';
+  document.getElementById('opp-rfq').value = '';
+  document.getElementById('opp-sol').value = '';
+  document.getElementById('opp-pn').value = '';
+  document.getElementById('opp-qty').value = '';
+  document.getElementById('opp-units').value = '';
+  document.getElementById('opp-date').value = '';
+  document.getElementById('opp-status').value = 'Active';
+  document.getElementById('opp-notes').value = '';
+  document.getElementById('opp-modal-title').textContent = 'Add opportunity';
+  pendingFiles = []; document.getElementById('file-list').innerHTML = '';
+  openModal('opp-modal');
+}
+
+function editOpp(id) {
+  const o = opps.find(x => x.id === id);
+  if (!o) return;
+  document.getElementById('opp-id').value = o.id;
+  document.getElementById('opp-rfq').value = o.rfq||'';
+  document.getElementById('opp-sol').value = o.solicitation_id||'';
+  document.getElementById('opp-pn').value = o.part_number||'';
+  document.getElementById('opp-qty').value = o.qty||'';
+  document.getElementById('opp-units').value = o.units||'';
+  document.getElementById('opp-date').value = o.submission_date||'';
+  document.getElementById('opp-status').value = o.status||'Active';
+  document.getElementById('opp-notes').value = o.notes||'';
+  document.getElementById('opp-modal-title').textContent = 'Edit opportunity';
+  pendingFiles = []; document.getElementById('file-list').innerHTML = '';
+  openModal('opp-modal');
+}
+
+async function saveOpportunity() {
+  const rfq = document.getElementById('opp-rfq').value.trim();
+  if (!rfq) { toast('RFQ is required', true); return; }
+  const btn = document.getElementById('opp-save-btn');
+  btn.textContent = 'Saving…'; btn.disabled = true;
+  const payload = {
+    rfq, solicitation_id: document.getElementById('opp-sol').value.trim()||null,
+    part_number: document.getElementById('opp-pn').value.trim()||null,
+    qty: document.getElementById('opp-qty').value||null,
+    units: document.getElementById('opp-units').value.trim()||null,
+    submission_date: document.getElementById('opp-date').value||null,
+    status: document.getElementById('opp-status').value,
+    notes: document.getElementById('opp-notes').value.trim()||null
+  };
+  const id = document.getElementById('opp-id').value;
+  try {
+    let oppId = id;
+    if (id) {
+      await db('opportunities?id=eq.'+id, { method: 'PATCH', body: JSON.stringify(payload) });
+    } else {
+      const res = await db('opportunities', { method: 'POST', body: JSON.stringify(payload) });
+      oppId = res[0].id;
+    }
+    for (const f of pendingFiles) await uploadFile(oppId, f);
+    toast(id ? 'Opportunity updated' : 'Opportunity added');
+    closeModal('opp-modal');
+    await loadOpps();
+  } catch(e) { toast('Error: ' + e.message, true); }
+  btn.textContent = 'Save opportunity'; btn.disabled = false;
+}
+
+async function deleteOpp(id) {
+  if (!confirm('Delete this opportunity and all its files?')) return;
+  await db('opportunities?id=eq.'+id, { method: 'DELETE' });
+  toast('Deleted'); await loadOpps();
+}
+
+async function openFile(path) {
+  try { const url = await getFileUrl(path); window.open(url, '_blank'); }
+  catch(e) { toast('Could not open file', true); }
+}
+
+// ── CONTACTS ──────────────────────────────────────────────
+async function loadContacts() {
+  contacts = await db('contacts?order=created_at.desc');
+  renderContacts(); updateCounts();
+}
+
+function renderContacts() {
+  const tb = document.getElementById('con-tbody');
+  if (!contacts.length) { tb.innerHTML = '<tr class="empty-row"><td colspan="6">No contacts yet</td></tr>'; return; }
+  tb.innerHTML = contacts.map(c => `<tr>
+    <td><div style="font-weight:500">${esc(c.name)}</div></td>
+    <td>${esc(c.agency||'—')}</td>
+    <td style="color:var(--text-muted)">${esc(c.title||'—')}</td>
+    <td class="td-mono">${c.email ? `<a href="mailto:${esc(c.email)}" style="color:var(--accent)">${esc(c.email)}</a>` : '—'}</td>
+    <td>${c.relationship ? `<span class="badge badge-active">${esc(c.relationship)}</span>` : '—'}</td>
+    <td><div class="actions">
+      <button class="btn btn-ghost btn-sm" onclick="editCon('${c.id}')">Edit</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteCon('${c.id}')">Del</button>
+    </div></td>
+  </tr>`).join('');
+}
+
+function openConModal() {
+  ['con-id','con-name','con-title','con-agency','con-email','con-phone','con-linkedin','con-notes','con-last'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('con-rel').value = '';
+  document.getElementById('con-modal-title').textContent = 'Add contact';
+  openModal('con-modal');
+}
+
+function editCon(id) {
+  const c = contacts.find(x => x.id === id); if (!c) return;
+  document.getElementById('con-id').value = c.id;
+  document.getElementById('con-name').value = c.name||'';
+  document.getElementById('con-title').value = c.title||'';
+  document.getElementById('con-agency').value = c.agency||'';
+  document.getElementById('con-email').value = c.email||'';
+  document.getElementById('con-phone').value = c.phone||'';
+  document.getElementById('con-rel').value = c.relationship||'';
+  document.getElementById('con-last').value = c.last_contacted||'';
+  document.getElementById('con-linkedin').value = c.linkedin||'';
+  document.getElementById('con-notes').value = c.notes||'';
+  document.getElementById('con-modal-title').textContent = 'Edit contact';
+  openModal('con-modal');
+}
+
+async function saveContact() {
+  const name = document.getElementById('con-name').value.trim();
+  if (!name) { toast('Name is required', true); return; }
+  const payload = { name, title: document.getElementById('con-title').value.trim()||null, agency: document.getElementById('con-agency').value.trim()||null, email: document.getElementById('con-email').value.trim()||null, phone: document.getElementById('con-phone').value.trim()||null, relationship: document.getElementById('con-rel').value||null, last_contacted: document.getElementById('con-last').value||null, linkedin: document.getElementById('con-linkedin').value.trim()||null, notes: document.getElementById('con-notes').value.trim()||null };
+  const id = document.getElementById('con-id').value;
+  try {
+    if (id) await db('contacts?id=eq.'+id, { method: 'PATCH', body: JSON.stringify(payload) });
+    else await db('contacts', { method: 'POST', body: JSON.stringify(payload) });
+    toast(id ? 'Contact updated' : 'Contact added');
+    closeModal('con-modal'); await loadContacts();
+  } catch(e) { toast('Error: ' + e.message, true); }
+}
+
+async function deleteCon(id) {
+  if (!confirm('Delete this contact?')) return;
+  await db('contacts?id=eq.'+id, { method: 'DELETE' });
+  toast('Deleted'); await loadContacts();
+}
+
+// ── TASKS ─────────────────────────────────────────────────
+async function loadTasks() {
+  tasks = await db('tasks?order=due_date.asc.nullslast');
+  renderTasks(); updateCounts();
+}
+
+function renderTasks() {
+  const tb = document.getElementById('task-tbody');
+  if (!tasks.length) { tb.innerHTML = '<tr class="empty-row"><td colspan="6">No tasks yet</td></tr>'; return; }
+  tb.innerHTML = tasks.map(t => {
+    const opp = opps.find(o => o.id === t.opportunity_id);
+    const con = contacts.find(c => c.id === t.contact_id);
+    const linked = [opp ? `RFQ: ${opp.rfq}` : '', con ? con.name : ''].filter(Boolean).join(' · ') || '—';
+    return `<tr style="${t.done ? 'opacity:0.5' : ''}">
+      <td><span style="${t.done ? 'text-decoration:line-through' : ''}">${esc(t.task)}</span></td>
+      <td class="td-mono">${t.due_date ? fmtDate(t.due_date) : '—'}</td>
+      <td><span class="badge badge-${(t.priority||'medium').toLowerCase()}">${esc(t.priority||'Medium')}</span></td>
+      <td style="font-size:12px;color:var(--text-muted)">${linked}</td>
+      <td><input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask('${t.id}',this.checked)"></td>
+      <td><div class="actions">
+        <button class="btn btn-danger btn-sm" onclick="deleteTask('${t.id}')">Del</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+function openTaskModal() {
+  ['task-id','task-name','task-due','task-notes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('task-priority').value = 'Medium';
+  const os = document.getElementById('task-opp');
+  os.innerHTML = '<option value="">None</option>' + opps.map(o => `<option value="${o.id}">${esc(o.rfq)}</option>`).join('');
+  const cs = document.getElementById('task-con');
+  cs.innerHTML = '<option value="">None</option>' + contacts.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
+  openModal('task-modal');
+}
+
+async function saveTask() {
+  const task = document.getElementById('task-name').value.trim();
+  if (!task) { toast('Task is required', true); return; }
+  const payload = { task, due_date: document.getElementById('task-due').value||null, priority: document.getElementById('task-priority').value, opportunity_id: document.getElementById('task-opp').value||null, contact_id: document.getElementById('task-con').value||null, notes: document.getElementById('task-notes').value.trim()||null };
+  const id = document.getElementById('task-id').value;
+  try {
+    if (id) await db('tasks?id=eq.'+id, { method: 'PATCH', body: JSON.stringify(payload) });
+    else await db('tasks', { method: 'POST', body: JSON.stringify(payload) });
+    toast('Task saved'); closeModal('task-modal'); await loadTasks();
+  } catch(e) { toast('Error: ' + e.message, true); }
+}
+
+async function toggleTask(id, done) {
+  await db('tasks?id=eq.'+id, { method: 'PATCH', body: JSON.stringify({ done }) });
+  await loadTasks();
+}
+
+async function deleteTask(id) {
+  if (!confirm('Delete this task?')) return;
+  await db('tasks?id=eq.'+id, { method: 'DELETE' });
+  toast('Deleted'); await loadTasks();
+}
+
+// ── Dashboard ─────────────────────────────────────────────
+function renderDashboard() {
+  document.getElementById('d-opps').textContent = opps.length;
+  document.getElementById('d-active').textContent = opps.filter(o => o.status === 'Active').length;
+  document.getElementById('d-cons').textContent = contacts.length;
+  document.getElementById('d-tasks').textContent = tasks.filter(t => !t.done).length;
+
+  const recent = opps.slice(0,5);
+  const doEl = document.getElementById('dash-opps');
+  if (!recent.length) { doEl.innerHTML = '<p style="padding:20px;color:var(--text-faint);font-size:13px">No opportunities yet</p>'; }
+  else doEl.innerHTML = `<table><thead><tr><th>RFQ</th><th>Status</th></tr></thead><tbody>${recent.map(o=>`<tr><td>${esc(o.rfq)}</td><td><span class="badge badge-${(o.status||'active').toLowerCase()}">${esc(o.status||'Active')}</span></td></tr>`).join('')}</tbody></table>`;
+
+  const deadlines = opps.filter(o => o.submission_date && o.status === 'Active').sort((a,b) => a.submission_date.localeCompare(b.submission_date)).slice(0,5);
+  const ddEl = document.getElementById('dash-deadlines');
+  if (!deadlines.length) { ddEl.innerHTML = '<p style="padding:20px;color:var(--text-faint);font-size:13px">No upcoming deadlines</p>'; }
+  else ddEl.innerHTML = `<table><thead><tr><th>RFQ</th><th>Due</th></tr></thead><tbody>${deadlines.map(o=>`<tr><td>${esc(o.rfq)}</td><td class="td-mono">${fmtDate(o.submission_date)}</td></tr>`).join('')}</tbody></table>`;
+}
+
+// ── Counts ────────────────────────────────────────────────
+function updateCounts() {
+  document.getElementById('opp-count').textContent = opps.length;
+  document.getElementById('con-count').textContent = contacts.length;
+  document.getElementById('task-count').textContent = tasks.filter(t => !t.done).length;
+  document.getElementById('d-tasks').textContent = tasks.filter(t => !t.done).length;
+  document.getElementById('d-cons').textContent = contacts.length;
+  document.getElementById('d-opps').textContent = opps.length;
+}
+
+// ── Utils ─────────────────────────────────────────────────
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmtDate(d) { if (!d) return '—'; const [y,m,day] = d.split('-'); return `${m}/${day}/${y}`; }
+
+// ── Init ──────────────────────────────────────────────────
+async function init() {
+  await Promise.all([loadOpps(), loadContacts(), loadTasks()]);
+  renderDashboard();
+}
+init();
+</script>
+</body>
+</html>
