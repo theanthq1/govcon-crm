@@ -749,25 +749,71 @@ textarea { resize: vertical; min-height: 80px; }
         </div>
       </div>
 
-      <!-- TASKS -->
-      <div id="page-tasks" class="page">
-        <div class="section-header">
-          <span class="section-title">Tasks &amp; follow-ups</span>
-          <button class="btn btn-primary" onclick="openTaskModal()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Add task
-          </button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr><th>Task</th><th>Due date</th><th>Priority</th><th>Linked to</th><th>Done</th><th></th></tr>
-            </thead>
-            <tbody id="task-tbody"><tr class="empty-row"><td colspan="6"><div class="loading"><div class="spinner"></div> Loading…</div></td></tr></tbody>
-          </table>
-        </div>
+<!-- ADD OPPORTUNITY PAGE -->
+<div id="page-add-opportunity" class="page">
+  <div class="section-header">
+    <span class="section-title">New opportunity</span>
+  </div>
+  <div class="table-wrap" style="max-width:720px;padding:32px;">
+    <div class="form-grid">
+      <div class="form-group form-full">
+        <label>RFQ <span class="req">*</span></label>
+        <input type="text" id="page-opp-rfq" placeholder="RFQ number or description">
       </div>
-
+      <div class="form-group">
+        <label>Solicitation ID</label>
+        <input type="text" id="page-opp-sol" placeholder="e.g. W911QY-24-Q-0042">
+      </div>
+      <div class="form-group">
+        <label>Part number / NSN</label>
+        <input type="text" id="page-opp-pn" placeholder="e.g. NSN 1234-56-789-0123">
+      </div>
+      <div class="form-group">
+        <label>Amount (qty)</label>
+        <input type="number" id="page-opp-qty" placeholder="100">
+      </div>
+      <div class="form-group">
+        <label>Units</label>
+        <input type="text" id="page-opp-units" placeholder="ea, lot, case…">
+      </div>
+      <div class="form-group">
+        <label>Submission date</label>
+        <input type="date" id="page-opp-date">
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="page-opp-status">
+          <option value="Active">Active</option>
+          <option value="Pending">Pending</option>
+          <option value="Won">Won</option>
+          <option value="Lost">Lost</option>
+        </select>
+      </div>
+      <div class="form-group form-full">
+        <label>Notes</label>
+        <textarea id="page-opp-notes" placeholder="Any notes about this opportunity…"></textarea>
+      </div>
+      <div class="form-group form-full">
+        <label>Attachments</label>
+        <div class="file-zone" id="page-file-zone"
+          onclick="document.getElementById('page-file-input').click()"
+          ondragover="fileDragOver2(event)"
+          ondragleave="fileDragLeave2(event)"
+          ondrop="fileDrop2(event)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--text-faint)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <p>Click to upload or drag &amp; drop</p>
+          <small>PDF, DOCX, XLSX, PNG, JPG — any format</small>
+        </div>
+        <input type="file" id="page-file-input" multiple style="display:none" onchange="pageFilesSelected(this.files)">
+        <div class="file-list" id="page-file-list"></div>
+      </div>
+    </div>
+    <div style="margin-top:32px;padding-top:24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;">
+      <button class="btn btn-ghost" onclick="clearOppPage()">Clear</button>
+      <button class="btn btn-primary" id="page-opp-save-btn" onclick="saveOpportunityPage()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px"><polyline points="20 6 9 17 4 12"/></svg>
+        Add opportunity
+      </button>
     </div>
   </div>
 </div>
