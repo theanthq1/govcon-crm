@@ -40,7 +40,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Animated ambient background */
 body::before {
   content: '';
   position: fixed;
@@ -60,13 +59,7 @@ body::after {
     repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(74,124,138,0.3) 35px, rgba(74,124,138,0.3) 70px);
 }
 
-.orb {
-  position: fixed;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: -1;
-  animation: breathe 10s ease-in-out infinite;
-}
+.orb { position: fixed; border-radius: 50%; pointer-events: none; z-index: -1; animation: breathe 10s ease-in-out infinite; }
 .orb-1 { width: 500px; height: 500px; top: -150px; left: -150px; background: radial-gradient(circle, rgba(45,90,135,0.07) 0%, transparent 70%); animation-delay: 0s; }
 .orb-2 { width: 400px; height: 400px; bottom: -100px; right: -100px; background: radial-gradient(circle, rgba(107,155,122,0.08) 0%, transparent 70%); animation-delay: 3s; }
 .orb-3 { width: 300px; height: 300px; top: 40%; left: 55%; background: radial-gradient(circle, rgba(241,229,172,0.12) 0%, transparent 70%); animation-delay: 6s; }
@@ -77,10 +70,8 @@ body::after {
   66% { transform: scale(0.9) translate(10px, 15px); opacity: 0.5; }
 }
 
-/* Layout */
 .shell { display: flex; min-height: 100vh; }
 
-/* Sidebar */
 .sidebar {
   width: 240px;
   background: rgba(255,255,255,0.72);
@@ -120,7 +111,7 @@ body::after {
   text-transform: uppercase;
 }
 
-.sidebar-nav { flex: 1; padding: 16px 12px; }
+.sidebar-nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 
 .nav-item {
   display: flex;
@@ -162,6 +153,12 @@ body::after {
   font-weight: 600;
 }
 
+.nav-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 10px 14px;
+}
+
 .sidebar-footer {
   padding: 16px 24px;
   border-top: 1px solid var(--border);
@@ -186,7 +183,6 @@ body::after {
   50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 0 4px rgba(107,155,122,0); }
 }
 
-/* Main */
 .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 
 .topbar {
@@ -209,19 +205,13 @@ body::after {
   letter-spacing: -0.02em;
 }
 
-.topbar-sub {
-  font-size: 12px;
-  color: var(--text-faint);
-  margin-top: 1px;
-}
+.topbar-sub { font-size: 12px; color: var(--text-faint); margin-top: 1px; }
 
 .content { flex: 1; padding: 32px; overflow-y: auto; }
 
-/* Pages */
 .page { display: none; }
 .page.active { display: block; }
 
-/* Stats grid */
 .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
 
 .stat-card {
@@ -245,44 +235,14 @@ body::after {
   border-radius: 18px 18px 0 0;
 }
 
-.stat-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(45,90,135,0.12);
-}
+.stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(45,90,135,0.12); }
 
-.stat-label {
-  font-size: 11px;
-  color: var(--text-faint);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 600;
-}
+.stat-label { font-size: 11px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+.stat-val { font-family: var(--serif); font-size: 34px; color: var(--primary); margin-top: 6px; letter-spacing: -0.02em; }
 
-.stat-val {
-  font-family: var(--serif);
-  font-size: 34px;
-  color: var(--primary);
-  margin-top: 6px;
-  letter-spacing: -0.02em;
-}
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.section-title { font-family: var(--serif); font-size: 16px; font-weight: 400; color: var(--dark); letter-spacing: -0.01em; }
 
-/* Section headers */
-.section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.section-title {
-  font-family: var(--serif);
-  font-size: 16px;
-  font-weight: 400;
-  color: var(--dark);
-  letter-spacing: -0.01em;
-}
-
-/* Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -298,45 +258,15 @@ body::after {
   white-space: nowrap;
 }
 
-.btn-primary {
-  background: var(--gradient-1);
-  color: #fff;
-  box-shadow: 0 4px 15px rgba(45,90,135,0.25);
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 22px rgba(45,90,135,0.35);
-}
-
-.btn-ghost {
-  background: rgba(255,255,255,0.7);
-  color: var(--text-muted);
-  border-color: var(--border);
-  backdrop-filter: blur(8px);
-}
-
-.btn-ghost:hover {
-  background: rgba(255,255,255,0.95);
-  color: var(--primary);
-  border-color: var(--border-strong);
-}
-
-.btn-danger {
-  background: var(--danger-bg);
-  color: var(--danger);
-  border-color: rgba(192,57,43,0.2);
-}
-
-.btn-danger:hover {
-  background: #fde3e0;
-  border-color: rgba(192,57,43,0.35);
-}
-
+.btn-primary { background: var(--gradient-1); color: #fff; box-shadow: 0 4px 15px rgba(45,90,135,0.25); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(45,90,135,0.35); }
+.btn-ghost { background: rgba(255,255,255,0.7); color: var(--text-muted); border-color: var(--border); backdrop-filter: blur(8px); }
+.btn-ghost:hover { background: rgba(255,255,255,0.95); color: var(--primary); border-color: var(--border-strong); }
+.btn-danger { background: var(--danger-bg); color: var(--danger); border-color: rgba(192,57,43,0.2); }
+.btn-danger:hover { background: #fde3e0; border-color: rgba(192,57,43,0.35); }
 .btn-sm { padding: 5px 12px; font-size: 12px; }
 .btn svg { width: 14px; height: 14px; }
 
-/* Table */
 .table-wrap {
   background: rgba(255,255,255,0.75);
   backdrop-filter: blur(12px);
@@ -369,20 +299,10 @@ td {
 
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: rgba(45,90,135,0.025); }
-
 .td-mono { font-variant-numeric: tabular-nums; font-size: 12.5px; color: var(--text-muted); }
 .empty-row td { text-align: center; color: var(--text-faint); padding: 48px; font-size: 13px; }
 
-/* Badges */
-.badge {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-}
-
+.badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.03em; }
 .badge-active { background: rgba(107,155,122,0.15); color: #3a7a52; border: 1px solid rgba(107,155,122,0.3); }
 .badge-won { background: rgba(45,90,135,0.1); color: var(--primary); border: 1px solid rgba(45,90,135,0.2); }
 .badge-lost { background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(192,57,43,0.2); }
@@ -390,76 +310,33 @@ tr:hover td { background: rgba(45,90,135,0.025); }
 .badge-high { background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(192,57,43,0.2); }
 .badge-medium { background: var(--warning-bg); color: var(--warning); border: 1px solid rgba(138,98,0,0.2); }
 .badge-low { background: rgba(107,155,122,0.15); color: #3a7a52; border: 1px solid rgba(107,155,122,0.3); }
-
 .actions { display: flex; gap: 6px; }
 
-/* Modal */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(42,42,62,0.4);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  z-index: 100;
-  align-items: center;
-  justify-content: center;
+/* ── Add Opportunity full-page form ── */
+.add-opp-page {
+  max-width: 760px;
 }
 
-.modal-overlay.open { display: flex; }
-
-.modal {
-  background: rgba(255,255,255,0.96);
-  backdrop-filter: blur(20px);
-  border-radius: 24px;
-  width: 580px;
-  max-width: 95vw;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 30px 80px rgba(42,42,62,0.2), 0 0 0 1px rgba(45,90,135,0.1);
-  animation: modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+.form-card {
+  background: rgba(255,255,255,0.82);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 36px 40px;
+  box-shadow: 0 4px 24px rgba(45,90,135,0.06);
+  margin-bottom: 20px;
 }
 
-@keyframes modalIn {
-  from { transform: scale(0.9) translateY(20px); opacity: 0; }
-  to { transform: scale(1) translateY(0); opacity: 1; }
-}
-
-.modal-header {
-  padding: 24px 28px 18px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.modal-title {
+.form-card-title {
   font-family: var(--serif);
-  font-size: 20px;
-  font-weight: 400;
-  color: var(--dark);
+  font-size: 15px;
+  color: var(--primary);
+  margin-bottom: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
 }
 
-.modal-close {
-  background: rgba(45,90,135,0.07);
-  border: none;
-  cursor: pointer;
-  color: var(--text-muted);
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.25s ease;
-}
-
-.modal-close:hover { background: rgba(45,90,135,0.15); color: var(--primary); transform: rotate(90deg); }
-.modal-body { padding: 22px 28px; }
-.modal-footer { padding: 18px 28px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
-
-/* Form */
-.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 .form-full { grid-column: 1 / -1; }
 .form-group { display: flex; flex-direction: column; gap: 6px; }
 
@@ -476,7 +353,7 @@ label .req { color: var(--danger); }
 input, select, textarea {
   font-family: var(--sans);
   font-size: 13.5px;
-  padding: 10px 14px;
+  padding: 11px 14px;
   border: 1.5px solid var(--border);
   border-radius: 12px;
   background: rgba(255,255,255,0.8);
@@ -492,25 +369,19 @@ input:focus, select:focus, textarea:focus {
   background: white;
 }
 
-textarea { resize: vertical; min-height: 80px; }
-.hint { font-size: 11px; color: var(--text-faint); }
+textarea { resize: vertical; min-height: 90px; }
 
-/* File upload */
 .file-zone {
   border: 1.5px dashed var(--border-strong);
   border-radius: 14px;
-  padding: 22px;
+  padding: 28px;
   text-align: center;
   cursor: pointer;
   transition: all 0.25s ease;
   background: rgba(247,248,252,0.6);
 }
 
-.file-zone:hover, .file-zone.dragover {
-  border-color: var(--secondary);
-  background: rgba(74,124,138,0.05);
-}
-
+.file-zone:hover, .file-zone.dragover { border-color: var(--secondary); background: rgba(74,124,138,0.05); }
 .file-zone p { font-size: 13px; color: var(--text-muted); margin-top: 8px; }
 .file-zone small { font-size: 11px; color: var(--text-faint); }
 .file-list { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
@@ -548,11 +419,95 @@ textarea { resize: vertical; min-height: 80px; }
 
 .file-chip:hover { background: rgba(74,124,138,0.15); }
 
-/* Toast */
+.submit-bar {
+  background: rgba(255,255,255,0.82);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 24px rgba(45,90,135,0.06);
+}
+
+.submit-bar-hint { font-size: 12px; color: var(--text-faint); }
+
+.btn-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 32px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-family: var(--sans);
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  background: var(--gradient-1);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(45,90,135,0.3);
+  transition: all 0.25s ease;
+  letter-spacing: 0.01em;
+}
+
+.btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(45,90,135,0.4); }
+.btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.btn-submit svg { width: 16px; height: 16px; }
+
+/* Modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(42,42,62,0.4);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  width: 580px;
+  max-width: 95vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 30px 80px rgba(42,42,62,0.2), 0 0 0 1px rgba(45,90,135,0.1);
+  animation: modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+@keyframes modalIn {
+  from { transform: scale(0.9) translateY(20px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.modal-header { padding: 24px 28px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--dark); }
+
+.modal-close {
+  background: rgba(45,90,135,0.07);
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.25s ease;
+}
+
+.modal-close:hover { background: rgba(45,90,135,0.15); color: var(--primary); transform: rotate(90deg); }
+.modal-body { padding: 22px 28px; }
+.modal-footer { padding: 18px 28px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+
 .toast {
   position: fixed;
-  bottom: 28px;
-  right: 28px;
+  bottom: 28px; right: 28px;
   background: var(--gradient-1);
   color: #fff;
   padding: 13px 22px;
@@ -570,29 +525,10 @@ textarea { resize: vertical; min-height: 80px; }
 .toast.show { transform: translateY(0); opacity: 1; }
 .toast.error { background: linear-gradient(135deg, #c0392b, #e74c3c); box-shadow: 0 8px 30px rgba(192,57,43,0.3); }
 
-/* Loading */
-.loading {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--text-faint);
-  font-size: 13px;
-  padding: 48px;
-  justify-content: center;
-}
-
-.spinner {
-  width: 18px;
-  height: 18px;
-  border: 2px solid var(--border);
-  border-top-color: var(--secondary);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
+.loading { display: flex; align-items: center; gap: 10px; color: var(--text-faint); font-size: 13px; padding: 48px; justify-content: center; }
+.spinner { width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--secondary); border-radius: 50%; animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* Dashboard */
 .dash-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 
 .dash-card {
@@ -604,23 +540,16 @@ textarea { resize: vertical; min-height: 80px; }
   box-shadow: 0 4px 20px rgba(45,90,135,0.06);
 }
 
-.dash-card-header {
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(247,248,252,0.6);
-}
-
+.dash-card-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: rgba(247,248,252,0.6); }
 .dash-card table th { font-size: 10px; padding: 10px 14px; }
 .dash-card table td { padding: 11px 14px; font-size: 12.5px; }
 
-/* Responsive */
 @media (max-width: 900px) {
   .stats-grid { grid-template-columns: 1fr 1fr; }
   .dash-row { grid-template-columns: 1fr; }
   .form-grid { grid-template-columns: 1fr; }
+  .form-card { padding: 24px 20px; }
+  .submit-bar { flex-direction: column; gap: 14px; text-align: center; }
 }
 
 @media (max-width: 700px) {
@@ -651,16 +580,28 @@ textarea { resize: vertical; min-height: 80px; }
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
         <span>Dashboard</span>
       </div>
+
+      <div class="nav-divider"></div>
+
       <div class="nav-item" onclick="goto('opportunities')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         <span>Opportunities</span>
         <span class="nav-count" id="opp-count">0</span>
       </div>
+
+      <div class="nav-item" onclick="goto('add-opportunity')" id="nav-add-opp">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        <span>Add Opportunity</span>
+      </div>
+
+      <div class="nav-divider"></div>
+
       <div class="nav-item" onclick="goto('contacts')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         <span>Contacts</span>
         <span class="nav-count" id="con-count">0</span>
       </div>
+
       <div class="nav-item" onclick="goto('tasks')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
         <span>Tasks</span>
@@ -703,11 +644,11 @@ textarea { resize: vertical; min-height: 80px; }
         </div>
       </div>
 
-      <!-- OPPORTUNITIES -->
+      <!-- OPPORTUNITIES LIST -->
       <div id="page-opportunities" class="page">
         <div class="section-header">
           <span class="section-title">All opportunities</span>
-          <button class="btn btn-primary" onclick="openOppModal()">
+          <button class="btn btn-primary" onclick="goto('add-opportunity')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Add opportunity
           </button>
@@ -730,6 +671,93 @@ textarea { resize: vertical; min-height: 80px; }
         </div>
       </div>
 
+      <!-- ADD OPPORTUNITY — full page form -->
+      <div id="page-add-opportunity" class="page">
+        <div class="add-opp-page">
+
+          <div class="form-card">
+            <div class="form-card-title">RFQ &amp; Solicitation Details</div>
+            <div class="form-grid">
+              <div class="form-group form-full">
+                <label>RFQ <span class="req">*</span></label>
+                <input type="text" id="ao-rfq" placeholder="RFQ number or description">
+              </div>
+              <div class="form-group">
+                <label>Solicitation ID</label>
+                <input type="text" id="ao-sol" placeholder="e.g. W911QY-24-Q-0042">
+              </div>
+              <div class="form-group">
+                <label>Status</label>
+                <select id="ao-status">
+                  <option value="Active">Active</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Won">Won</option>
+                  <option value="Lost">Lost</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-card">
+            <div class="form-card-title">Part &amp; Quantity</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Part number / NSN</label>
+                <input type="text" id="ao-pn" placeholder="e.g. NSN 1234-56-789-0123">
+              </div>
+              <div class="form-group">
+                <label>Submission date</label>
+                <input type="date" id="ao-date">
+              </div>
+              <div class="form-group">
+                <label>Amount (qty)</label>
+                <input type="number" id="ao-qty" placeholder="100">
+              </div>
+              <div class="form-group">
+                <label>Units</label>
+                <input type="text" id="ao-units" placeholder="ea, lot, case…">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-card">
+            <div class="form-card-title">Notes &amp; Attachments</div>
+            <div class="form-grid">
+              <div class="form-group form-full">
+                <label>Notes</label>
+                <textarea id="ao-notes" placeholder="Any notes about this opportunity…"></textarea>
+              </div>
+              <div class="form-group form-full">
+                <label>Attachments</label>
+                <div class="file-zone" id="ao-file-zone"
+                  onclick="document.getElementById('ao-file-input').click()"
+                  ondragover="aoFileDragOver(event)"
+                  ondragleave="aoFileDragLeave(event)"
+                  ondrop="aoFileDrop(event)">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--text-faint)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  <p>Click to upload or drag &amp; drop</p>
+                  <small>PDF, DOCX, XLSX, PNG, JPG — any format</small>
+                </div>
+                <input type="file" id="ao-file-input" multiple style="display:none" onchange="aoFilesSelected(this.files)">
+                <div class="file-list" id="ao-file-list"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="submit-bar">
+            <span class="submit-bar-hint">All fields except RFQ are optional</span>
+            <div style="display:flex;gap:12px;align-items:center;">
+              <button class="btn btn-ghost" onclick="clearAddOpp()">Clear form</button>
+              <button class="btn-submit" id="ao-save-btn" onclick="saveNewOpportunity()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Add opportunity
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
       <!-- CONTACTS -->
       <div id="page-contacts" class="page">
         <div class="section-header">
@@ -749,80 +777,34 @@ textarea { resize: vertical; min-height: 80px; }
         </div>
       </div>
 
-<!-- ADD OPPORTUNITY PAGE -->
-<div id="page-add-opportunity" class="page">
-  <div class="section-header">
-    <span class="section-title">New opportunity</span>
-  </div>
-  <div class="table-wrap" style="max-width:720px;padding:32px;">
-    <div class="form-grid">
-      <div class="form-group form-full">
-        <label>RFQ <span class="req">*</span></label>
-        <input type="text" id="page-opp-rfq" placeholder="RFQ number or description">
-      </div>
-      <div class="form-group">
-        <label>Solicitation ID</label>
-        <input type="text" id="page-opp-sol" placeholder="e.g. W911QY-24-Q-0042">
-      </div>
-      <div class="form-group">
-        <label>Part number / NSN</label>
-        <input type="text" id="page-opp-pn" placeholder="e.g. NSN 1234-56-789-0123">
-      </div>
-      <div class="form-group">
-        <label>Amount (qty)</label>
-        <input type="number" id="page-opp-qty" placeholder="100">
-      </div>
-      <div class="form-group">
-        <label>Units</label>
-        <input type="text" id="page-opp-units" placeholder="ea, lot, case…">
-      </div>
-      <div class="form-group">
-        <label>Submission date</label>
-        <input type="date" id="page-opp-date">
-      </div>
-      <div class="form-group">
-        <label>Status</label>
-        <select id="page-opp-status">
-          <option value="Active">Active</option>
-          <option value="Pending">Pending</option>
-          <option value="Won">Won</option>
-          <option value="Lost">Lost</option>
-        </select>
-      </div>
-      <div class="form-group form-full">
-        <label>Notes</label>
-        <textarea id="page-opp-notes" placeholder="Any notes about this opportunity…"></textarea>
-      </div>
-      <div class="form-group form-full">
-        <label>Attachments</label>
-        <div class="file-zone" id="page-file-zone"
-          onclick="document.getElementById('page-file-input').click()"
-          ondragover="fileDragOver2(event)"
-          ondragleave="fileDragLeave2(event)"
-          ondrop="fileDrop2(event)">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--text-faint)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          <p>Click to upload or drag &amp; drop</p>
-          <small>PDF, DOCX, XLSX, PNG, JPG — any format</small>
+      <!-- TASKS -->
+      <div id="page-tasks" class="page">
+        <div class="section-header">
+          <span class="section-title">Tasks &amp; follow-ups</span>
+          <button class="btn btn-primary" onclick="openTaskModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add task
+          </button>
         </div>
-        <input type="file" id="page-file-input" multiple style="display:none" onchange="pageFilesSelected(this.files)">
-        <div class="file-list" id="page-file-list"></div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Task</th><th>Due date</th><th>Priority</th><th>Linked to</th><th>Done</th><th></th></tr>
+            </thead>
+            <tbody id="task-tbody"><tr class="empty-row"><td colspan="6"><div class="loading"><div class="spinner"></div> Loading…</div></td></tr></tbody>
+          </table>
+        </div>
       </div>
-    </div>
-    <div style="margin-top:32px;padding-top:24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;">
-      <button class="btn btn-ghost" onclick="clearOppPage()">Clear</button>
-      <button class="btn btn-primary" id="page-opp-save-btn" onclick="saveOpportunityPage()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px"><polyline points="20 6 9 17 4 12"/></svg>
-        Add opportunity
-      </button>
-    </div>
-  </div>
-</div>
 
-<!-- OPPORTUNITY MODAL -->
+    </div><!-- .content -->
+  </div><!-- .main -->
+</div><!-- .shell -->
+
+<!-- EDIT OPPORTUNITY MODAL (for editing existing entries) -->
 <div class="modal-overlay" id="opp-modal">
   <div class="modal">
     <div class="modal-header">
-      <span class="modal-title" id="opp-modal-title">Add opportunity</span>
+      <span class="modal-title">Edit opportunity</span>
       <button class="modal-close" onclick="closeModal('opp-modal')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
@@ -867,21 +849,11 @@ textarea { resize: vertical; min-height: 80px; }
           <label>Notes</label>
           <textarea id="opp-notes" placeholder="Any notes about this opportunity…"></textarea>
         </div>
-        <div class="form-group form-full">
-          <label>Attachments</label>
-          <div class="file-zone" id="file-zone" onclick="document.getElementById('file-input').click()" ondragover="fileDragOver(event)" ondragleave="fileDragLeave(event)" ondrop="fileDrop(event)">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--text-faint)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            <p>Click to upload or drag &amp; drop</p>
-            <small>PDF, DOCX, XLSX, PNG, JPG — any format</small>
-          </div>
-          <input type="file" id="file-input" multiple style="display:none" onchange="filesSelected(this.files)">
-          <div class="file-list" id="file-list"></div>
-        </div>
       </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('opp-modal')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveOpportunity()" id="opp-save-btn">Save opportunity</button>
+      <button class="btn btn-primary" onclick="saveEditedOpportunity()" id="opp-save-btn">Save changes</button>
     </div>
   </div>
 </div>
@@ -1008,7 +980,7 @@ const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsI
 const H = { 'Content-Type': 'application/json', 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Prefer': 'return=representation' };
 
 let opps = [], contacts = [], tasks = [], oppFiles = {};
-let pendingFiles = [];
+let aoPendingFiles = [];
 
 async function db(path, opts = {}) {
   const r = await fetch(SUPA_URL + '/rest/v1/' + path, { headers: H, ...opts });
@@ -1035,18 +1007,29 @@ async function getFileUrl(path) {
   return SUPA_URL + '/storage/v1' + d.signedURL;
 }
 
-const pages = { dashboard: 'Dashboard', opportunities: 'Opportunities', contacts: 'Contacts', tasks: 'Tasks & Follow-ups' };
-const subs = { dashboard: 'Government contracting pipeline overview', opportunities: 'Active bids, proposals, and pipeline', contacts: 'Agency officials, COs, teaming partners', tasks: 'Reminders, deadlines, action items' };
+/* ── Navigation ── */
+const pagesMeta = {
+  dashboard:        { title: 'Dashboard',        sub: 'Government contracting pipeline overview' },
+  opportunities:    { title: 'Opportunities',    sub: 'Active bids, proposals, and pipeline' },
+  'add-opportunity':{ title: 'Add Opportunity',  sub: 'Fill in the details below and click Add Opportunity to save' },
+  contacts:         { title: 'Contacts',         sub: 'Agency officials, COs, teaming partners' },
+  tasks:            { title: 'Tasks & Follow-ups', sub: 'Reminders, deadlines, action items' }
+};
+
+const navOrder = ['dashboard', 'opportunities', 'add-opportunity', 'contacts', 'tasks'];
 
 function goto(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
-  document.querySelectorAll('.nav-item')[['dashboard','opportunities','contacts','tasks'].indexOf(name)].classList.add('active');
-  document.getElementById('page-title').textContent = pages[name];
-  document.getElementById('page-sub').textContent = subs[name];
+  const idx = navOrder.indexOf(name);
+  if (idx !== -1) document.querySelectorAll('.nav-item')[idx].classList.add('active');
+  const meta = pagesMeta[name] || {};
+  document.getElementById('page-title').textContent = meta.title || name;
+  document.getElementById('page-sub').textContent   = meta.sub   || '';
 }
 
+/* ── Toast ── */
 function toast(msg, err = false) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -1054,32 +1037,77 @@ function toast(msg, err = false) {
   setTimeout(() => t.className = 'toast', 2800);
 }
 
+/* ── Modals ── */
 function openModal(id) { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); pendingFiles = []; document.getElementById('file-list').innerHTML = ''; }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
 
-function fileDragOver(e) { e.preventDefault(); document.getElementById('file-zone').classList.add('dragover'); }
-function fileDragLeave(e) { document.getElementById('file-zone').classList.remove('dragover'); }
-function fileDrop(e) { e.preventDefault(); fileDragLeave(); filesSelected(e.dataTransfer.files); }
+/* ── Add Opportunity page file handling ── */
+function aoFileDragOver(e)  { e.preventDefault(); document.getElementById('ao-file-zone').classList.add('dragover'); }
+function aoFileDragLeave(e) { document.getElementById('ao-file-zone').classList.remove('dragover'); }
+function aoFileDrop(e)      { e.preventDefault(); aoFileDragLeave(); aoFilesSelected(e.dataTransfer.files); }
 
-function filesSelected(files) {
-  Array.from(files).forEach(f => { if (!pendingFiles.find(p => p.name === f.name)) pendingFiles.push(f); });
-  renderFileList();
+function aoFilesSelected(files) {
+  Array.from(files).forEach(f => { if (!aoPendingFiles.find(p => p.name === f.name)) aoPendingFiles.push(f); });
+  renderAoFileList();
 }
 
-function renderFileList() {
-  const el = document.getElementById('file-list');
-  el.innerHTML = pendingFiles.map((f, i) => `
+function renderAoFileList() {
+  const el = document.getElementById('ao-file-list');
+  el.innerHTML = aoPendingFiles.map((f, i) => `
     <div class="file-item">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:var(--text-muted)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
       <span class="file-item-name">${f.name}</span>
-      <span class="file-item-size">${(f.size/1024).toFixed(0)}KB</span>
-      <button class="file-item-del" onclick="removeFile(${i})">&#x2715;</button>
+      <span class="file-item-size">${(f.size/1024).toFixed(0)} KB</span>
+      <button class="file-item-del" onclick="removeAoFile(${i})">&#x2715;</button>
     </div>`).join('');
 }
 
-function removeFile(i) { pendingFiles.splice(i, 1); renderFileList(); }
+function removeAoFile(i) { aoPendingFiles.splice(i, 1); renderAoFileList(); }
 
+function clearAddOpp() {
+  ['ao-rfq','ao-sol','ao-pn','ao-qty','ao-units','ao-notes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('ao-date').value   = '';
+  document.getElementById('ao-status').value = 'Active';
+  aoPendingFiles = [];
+  document.getElementById('ao-file-list').innerHTML = '';
+  document.getElementById('ao-file-input').value = '';
+}
+
+async function saveNewOpportunity() {
+  const rfq = document.getElementById('ao-rfq').value.trim();
+  if (!rfq) { toast('RFQ is required', true); document.getElementById('ao-rfq').focus(); return; }
+
+  const btn = document.getElementById('ao-save-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner" style="border-top-color:#fff;width:16px;height:16px;border-width:2px"></div> Saving…';
+
+  const payload = {
+    rfq,
+    solicitation_id: document.getElementById('ao-sol').value.trim()   || null,
+    part_number:     document.getElementById('ao-pn').value.trim()     || null,
+    qty:             document.getElementById('ao-qty').value            || null,
+    units:           document.getElementById('ao-units').value.trim()  || null,
+    submission_date: document.getElementById('ao-date').value           || null,
+    status:          document.getElementById('ao-status').value,
+    notes:           document.getElementById('ao-notes').value.trim()  || null
+  };
+
+  try {
+    const res   = await db('opportunities', { method: 'POST', body: JSON.stringify(payload) });
+    const oppId = res[0].id;
+    for (const f of aoPendingFiles) await uploadFile(oppId, f);
+    toast('Opportunity added!');
+    clearAddOpp();
+    await loadOpps();
+    goto('opportunities');
+  } catch(e) { toast('Error: ' + e.message, true); }
+
+  btn.disabled = false;
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px"><polyline points="20 6 9 17 4 12"/></svg> Add opportunity';
+}
+
+/* ── Opportunities list ── */
 async function loadOpps() {
   opps = await db('opportunities?order=created_at.desc&select=*');
   const files = await db('opportunity_files?select=*');
@@ -1090,10 +1118,12 @@ async function loadOpps() {
 
 function renderOpps() {
   const tb = document.getElementById('opp-tbody');
-  if (!opps.length) { tb.innerHTML = '<tr class="empty-row"><td colspan="7">No opportunities yet — add your first one</td></tr>'; return; }
+  if (!opps.length) { tb.innerHTML = '<tr class="empty-row"><td colspan="7">No opportunities yet — click Add Opportunity to get started</td></tr>'; return; }
   tb.innerHTML = opps.map(o => {
-    const files = oppFiles[o.id] || [];
-    const fileHtml = files.length ? files.map(f => `<a class="file-chip" onclick="openFile('${f.file_path}')">&#128206; ${f.file_name.length > 18 ? f.file_name.slice(0,16)+'...' : f.file_name}</a>`).join('') : '<span style="color:var(--text-faint);font-size:11px">—</span>';
+    const files    = oppFiles[o.id] || [];
+    const fileHtml = files.length
+      ? files.map(f => `<a class="file-chip" onclick="openFile('${f.file_path}')">&#128206; ${f.file_name.length > 18 ? f.file_name.slice(0,16)+'…' : f.file_name}</a>`).join('')
+      : '<span style="color:var(--text-faint);font-size:11px">—</span>';
     return `<tr>
       <td><div style="font-weight:500">${esc(o.rfq)}</div>${o.solicitation_id ? `<div class="td-mono" style="font-size:11px;color:var(--text-muted);margin-top:2px">${esc(o.solicitation_id)}</div>` : ''}</td>
       <td class="td-mono">${esc(o.part_number||'—')}</td>
@@ -1109,62 +1139,43 @@ function renderOpps() {
   }).join('');
 }
 
-function openOppModal() {
-  document.getElementById('opp-id').value = '';
-  document.getElementById('opp-rfq').value = '';
-  document.getElementById('opp-sol').value = '';
-  document.getElementById('opp-pn').value = '';
-  document.getElementById('opp-qty').value = '';
-  document.getElementById('opp-units').value = '';
-  document.getElementById('opp-date').value = '';
-  document.getElementById('opp-status').value = 'Active';
-  document.getElementById('opp-notes').value = '';
-  document.getElementById('opp-modal-title').textContent = 'Add opportunity';
-  pendingFiles = []; document.getElementById('file-list').innerHTML = '';
-  openModal('opp-modal');
-}
-
 function editOpp(id) {
-  const o = opps.find(x => x.id === id);
-  if (!o) return;
-  document.getElementById('opp-id').value = o.id;
-  document.getElementById('opp-rfq').value = o.rfq||'';
-  document.getElementById('opp-sol').value = o.solicitation_id||'';
-  document.getElementById('opp-pn').value = o.part_number||'';
-  document.getElementById('opp-qty').value = o.qty||'';
-  document.getElementById('opp-units').value = o.units||'';
-  document.getElementById('opp-date').value = o.submission_date||'';
+  const o = opps.find(x => x.id === id); if (!o) return;
+  document.getElementById('opp-id').value     = o.id;
+  document.getElementById('opp-rfq').value    = o.rfq||'';
+  document.getElementById('opp-sol').value    = o.solicitation_id||'';
+  document.getElementById('opp-pn').value     = o.part_number||'';
+  document.getElementById('opp-qty').value    = o.qty||'';
+  document.getElementById('opp-units').value  = o.units||'';
+  document.getElementById('opp-date').value   = o.submission_date||'';
   document.getElementById('opp-status').value = o.status||'Active';
-  document.getElementById('opp-notes').value = o.notes||'';
-  document.getElementById('opp-modal-title').textContent = 'Edit opportunity';
-  pendingFiles = []; document.getElementById('file-list').innerHTML = '';
+  document.getElementById('opp-notes').value  = o.notes||'';
   openModal('opp-modal');
 }
 
-async function saveOpportunity() {
+async function saveEditedOpportunity() {
   const rfq = document.getElementById('opp-rfq').value.trim();
   if (!rfq) { toast('RFQ is required', true); return; }
   const btn = document.getElementById('opp-save-btn');
   btn.textContent = 'Saving…'; btn.disabled = true;
-  const payload = {
-    rfq, solicitation_id: document.getElementById('opp-sol').value.trim()||null,
-    part_number: document.getElementById('opp-pn').value.trim()||null,
-    qty: document.getElementById('opp-qty').value||null,
-    units: document.getElementById('opp-units').value.trim()||null,
-    submission_date: document.getElementById('opp-date').value||null,
-    status: document.getElementById('opp-status').value,
-    notes: document.getElementById('opp-notes').value.trim()||null
-  };
   const id = document.getElementById('opp-id').value;
+  const payload = {
+    rfq,
+    solicitation_id: document.getElementById('opp-sol').value.trim()   || null,
+    part_number:     document.getElementById('opp-pn').value.trim()     || null,
+    qty:             document.getElementById('opp-qty').value            || null,
+    units:           document.getElementById('opp-units').value.trim()  || null,
+    submission_date: document.getElementById('opp-date').value           || null,
+    status:          document.getElementById('opp-status').value,
+    notes:           document.getElementById('opp-notes').value.trim()  || null
+  };
   try {
-    let oppId = id;
-    if (id) { await db('opportunities?id=eq.'+id, { method: 'PATCH', body: JSON.stringify(payload) }); }
-    else { const res = await db('opportunities', { method: 'POST', body: JSON.stringify(payload) }); oppId = res[0].id; }
-    for (const f of pendingFiles) await uploadFile(oppId, f);
-    toast(id ? 'Opportunity updated' : 'Opportunity added');
-    closeModal('opp-modal'); await loadOpps();
+    await db('opportunities?id=eq.'+id, { method: 'PATCH', body: JSON.stringify(payload) });
+    toast('Opportunity updated');
+    closeModal('opp-modal');
+    await loadOpps();
   } catch(e) { toast('Error: ' + e.message, true); }
-  btn.textContent = 'Save opportunity'; btn.disabled = false;
+  btn.textContent = 'Save changes'; btn.disabled = false;
 }
 
 async function deleteOpp(id) {
@@ -1178,6 +1189,7 @@ async function openFile(path) {
   catch(e) { toast('Could not open file', true); }
 }
 
+/* ── Contacts ── */
 async function loadContacts() {
   contacts = await db('contacts?order=created_at.desc');
   renderContacts(); updateCounts();
@@ -1208,16 +1220,16 @@ function openConModal() {
 
 function editCon(id) {
   const c = contacts.find(x => x.id === id); if (!c) return;
-  document.getElementById('con-id').value = c.id;
-  document.getElementById('con-name').value = c.name||'';
-  document.getElementById('con-title').value = c.title||'';
-  document.getElementById('con-agency').value = c.agency||'';
-  document.getElementById('con-email').value = c.email||'';
-  document.getElementById('con-phone').value = c.phone||'';
-  document.getElementById('con-rel').value = c.relationship||'';
-  document.getElementById('con-last').value = c.last_contacted||'';
+  document.getElementById('con-id').value       = c.id;
+  document.getElementById('con-name').value     = c.name||'';
+  document.getElementById('con-title').value    = c.title||'';
+  document.getElementById('con-agency').value   = c.agency||'';
+  document.getElementById('con-email').value    = c.email||'';
+  document.getElementById('con-phone').value    = c.phone||'';
+  document.getElementById('con-rel').value      = c.relationship||'';
+  document.getElementById('con-last').value     = c.last_contacted||'';
   document.getElementById('con-linkedin').value = c.linkedin||'';
-  document.getElementById('con-notes').value = c.notes||'';
+  document.getElementById('con-notes').value    = c.notes||'';
   document.getElementById('con-modal-title').textContent = 'Edit contact';
   openModal('con-modal');
 }
@@ -1225,11 +1237,21 @@ function editCon(id) {
 async function saveContact() {
   const name = document.getElementById('con-name').value.trim();
   if (!name) { toast('Name is required', true); return; }
-  const payload = { name, title: document.getElementById('con-title').value.trim()||null, agency: document.getElementById('con-agency').value.trim()||null, email: document.getElementById('con-email').value.trim()||null, phone: document.getElementById('con-phone').value.trim()||null, relationship: document.getElementById('con-rel').value||null, last_contacted: document.getElementById('con-last').value||null, linkedin: document.getElementById('con-linkedin').value.trim()||null, notes: document.getElementById('con-notes').value.trim()||null };
+  const payload = {
+    name,
+    title:          document.getElementById('con-title').value.trim()    || null,
+    agency:         document.getElementById('con-agency').value.trim()   || null,
+    email:          document.getElementById('con-email').value.trim()    || null,
+    phone:          document.getElementById('con-phone').value.trim()    || null,
+    relationship:   document.getElementById('con-rel').value             || null,
+    last_contacted: document.getElementById('con-last').value            || null,
+    linkedin:       document.getElementById('con-linkedin').value.trim() || null,
+    notes:          document.getElementById('con-notes').value.trim()    || null
+  };
   const id = document.getElementById('con-id').value;
   try {
     if (id) await db('contacts?id=eq.'+id, { method: 'PATCH', body: JSON.stringify(payload) });
-    else await db('contacts', { method: 'POST', body: JSON.stringify(payload) });
+    else     await db('contacts',           { method: 'POST',  body: JSON.stringify(payload) });
     toast(id ? 'Contact updated' : 'Contact added');
     closeModal('con-modal'); await loadContacts();
   } catch(e) { toast('Error: ' + e.message, true); }
@@ -1241,6 +1263,7 @@ async function deleteCon(id) {
   toast('Deleted'); await loadContacts();
 }
 
+/* ── Tasks ── */
 async function loadTasks() {
   tasks = await db('tasks?order=due_date.asc.nullslast');
   renderTasks(); updateCounts();
@@ -1250,8 +1273,8 @@ function renderTasks() {
   const tb = document.getElementById('task-tbody');
   if (!tasks.length) { tb.innerHTML = '<tr class="empty-row"><td colspan="6">No tasks yet</td></tr>'; return; }
   tb.innerHTML = tasks.map(t => {
-    const opp = opps.find(o => o.id === t.opportunity_id);
-    const con = contacts.find(c => c.id === t.contact_id);
+    const opp    = opps.find(o => o.id === t.opportunity_id);
+    const con    = contacts.find(c => c.id === t.contact_id);
     const linked = [opp ? `RFQ: ${opp.rfq}` : '', con ? con.name : ''].filter(Boolean).join(' · ') || '—';
     return `<tr style="${t.done ? 'opacity:0.45' : ''}">
       <td><span style="${t.done ? 'text-decoration:line-through;color:var(--text-faint)' : ''}">${esc(t.task)}</span></td>
@@ -1279,11 +1302,18 @@ function openTaskModal() {
 async function saveTask() {
   const task = document.getElementById('task-name').value.trim();
   if (!task) { toast('Task is required', true); return; }
-  const payload = { task, due_date: document.getElementById('task-due').value||null, priority: document.getElementById('task-priority').value, opportunity_id: document.getElementById('task-opp').value||null, contact_id: document.getElementById('task-con').value||null, notes: document.getElementById('task-notes').value.trim()||null };
+  const payload = {
+    task,
+    due_date:       document.getElementById('task-due').value      || null,
+    priority:       document.getElementById('task-priority').value,
+    opportunity_id: document.getElementById('task-opp').value      || null,
+    contact_id:     document.getElementById('task-con').value      || null,
+    notes:          document.getElementById('task-notes').value.trim() || null
+  };
   const id = document.getElementById('task-id').value;
   try {
     if (id) await db('tasks?id=eq.'+id, { method: 'PATCH', body: JSON.stringify(payload) });
-    else await db('tasks', { method: 'POST', body: JSON.stringify(payload) });
+    else     await db('tasks',           { method: 'POST',  body: JSON.stringify(payload) });
     toast('Task saved'); closeModal('task-modal'); await loadTasks();
   } catch(e) { toast('Error: ' + e.message, true); }
 }
@@ -1299,32 +1329,36 @@ async function deleteTask(id) {
   toast('Deleted'); await loadTasks();
 }
 
+/* ── Dashboard ── */
 function renderDashboard() {
-  document.getElementById('d-opps').textContent = opps.length;
+  document.getElementById('d-opps').textContent   = opps.length;
   document.getElementById('d-active').textContent = opps.filter(o => o.status === 'Active').length;
-  document.getElementById('d-cons').textContent = contacts.length;
-  document.getElementById('d-tasks').textContent = tasks.filter(t => !t.done).length;
+  document.getElementById('d-cons').textContent   = contacts.length;
+  document.getElementById('d-tasks').textContent  = tasks.filter(t => !t.done).length;
 
   const recent = opps.slice(0,5);
-  const doEl = document.getElementById('dash-opps');
-  if (!recent.length) { doEl.innerHTML = '<p style="padding:24px;color:var(--text-faint);font-size:13px;text-align:center">No opportunities yet</p>'; }
-  else doEl.innerHTML = `<table><thead><tr><th>RFQ</th><th>Status</th></tr></thead><tbody>${recent.map(o=>`<tr><td>${esc(o.rfq)}</td><td><span class="badge badge-${(o.status||'active').toLowerCase()}">${esc(o.status||'Active')}</span></td></tr>`).join('')}</tbody></table>`;
+  const doEl   = document.getElementById('dash-opps');
+  doEl.innerHTML = recent.length
+    ? `<table><thead><tr><th>RFQ</th><th>Status</th></tr></thead><tbody>${recent.map(o=>`<tr><td>${esc(o.rfq)}</td><td><span class="badge badge-${(o.status||'active').toLowerCase()}">${esc(o.status||'Active')}</span></td></tr>`).join('')}</tbody></table>`
+    : '<p style="padding:24px;color:var(--text-faint);font-size:13px;text-align:center">No opportunities yet</p>';
 
   const deadlines = opps.filter(o => o.submission_date && o.status === 'Active').sort((a,b) => a.submission_date.localeCompare(b.submission_date)).slice(0,5);
-  const ddEl = document.getElementById('dash-deadlines');
-  if (!deadlines.length) { ddEl.innerHTML = '<p style="padding:24px;color:var(--text-faint);font-size:13px;text-align:center">No upcoming deadlines</p>'; }
-  else ddEl.innerHTML = `<table><thead><tr><th>RFQ</th><th>Due</th></tr></thead><tbody>${deadlines.map(o=>`<tr><td>${esc(o.rfq)}</td><td class="td-mono">${fmtDate(o.submission_date)}</td></tr>`).join('')}</tbody></table>`;
+  const ddEl      = document.getElementById('dash-deadlines');
+  ddEl.innerHTML  = deadlines.length
+    ? `<table><thead><tr><th>RFQ</th><th>Due</th></tr></thead><tbody>${deadlines.map(o=>`<tr><td>${esc(o.rfq)}</td><td class="td-mono">${fmtDate(o.submission_date)}</td></tr>`).join('')}</tbody></table>`
+    : '<p style="padding:24px;color:var(--text-faint);font-size:13px;text-align:center">No upcoming deadlines</p>';
 }
 
 function updateCounts() {
-  document.getElementById('opp-count').textContent = opps.length;
-  document.getElementById('con-count').textContent = contacts.length;
+  document.getElementById('opp-count').textContent  = opps.length;
+  document.getElementById('con-count').textContent  = contacts.length;
   document.getElementById('task-count').textContent = tasks.filter(t => !t.done).length;
-  document.getElementById('d-tasks').textContent = tasks.filter(t => !t.done).length;
-  document.getElementById('d-cons').textContent = contacts.length;
-  document.getElementById('d-opps').textContent = opps.length;
+  document.getElementById('d-tasks').textContent    = tasks.filter(t => !t.done).length;
+  document.getElementById('d-cons').textContent     = contacts.length;
+  document.getElementById('d-opps').textContent     = opps.length;
 }
 
+/* ── Helpers ── */
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function fmtDate(d) { if (!d) return '—'; const [y,m,day] = d.split('-'); return `${m}/${day}/${y}`; }
 
